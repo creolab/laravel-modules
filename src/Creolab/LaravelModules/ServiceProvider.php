@@ -16,16 +16,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	{
 		$this->package('creolab/laravel-modules', 'modules', __DIR__ . '/../../');
 
-		// Register IoC bindings
-		$this->app['modules'] = $this->app->share(function($app)
-		{
-			return new Finder($app, $app['files'], $app['config']);
-		});
-
 		// Auto scan if specified
 		if ($this->app['config']->get('modules::mode') == 'auto')
 		{
 			$this->app['modules']->scan();
+		}
+		else
+		{
+			$this->app['modules']->manual();
 		}
 
 		// And finally register all modules
@@ -38,7 +36,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		// Register IoC bindings
+		$this->app['modules'] = $this->app->share(function($app)
+		{
+			return new Finder($app, $app['files'], $app['config']);
+		});
+	}
+
+	/**
+	 * Provided service
+	 * @return array
+	 */
+	public function provides()
+	{
+		return array('Modules');
 	}
 
 }

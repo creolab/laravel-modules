@@ -48,12 +48,21 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 * Initialize a module
 	 * @param Application $app
 	 */
-	public function __construct($name, $path, Application $app)
+	public function __construct($name, $path = null, $definition = null, Application $app)
 	{
-		$this->name           = $name;
-		$this->path           = pathinfo($path, PATHINFO_DIRNAME);
-		$this->definitionPath = $path;
-		$this->app            = $app;
+		$this->name = $name;
+		$this->app  = $app;
+		$this->path = $path;
+
+		// Get definition
+		if (is_string($definition) and $definition)
+		{
+			$this->definitionPath = $path . '/module.json';
+		}
+		elseif (is_array($definition))
+		{
+			$this->definition = $definition;
+		}
 
 		// Try to get the definition
 		$this->readDefinition();
@@ -65,16 +74,24 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function readDefinition()
 	{
-		$definition = @json_decode($this->app['files']->get($this->definitionPath), true);
-
-		// Disable the module
-		if ( ! $definition or (isset($definition['enabled']) and $definition['enabled'] === false))
+		if ($this->app['config']->get('modules::mode') == 'auto')
 		{
-			$this->enabled = false;
+			$this->definition = @json_decode($this->app['files']->get($this->definitionPath), true);
+
+			if ( ! $this->definition or (isset($this->definition['enabled']) and $this->definition['enabled'] === false))
+			{
+				$this->enabled = false;
+			}
+		}
+		else
+		{
+			if ((isset($this->definition['enabled']) and $this->definition['enabled'] === false))
+			{
+				$this->enabled = false;
+			}
 		}
 
-		// Add definition to object
-		$this->definition = $definition;
+		return $this->definition;
 	}
 
 	/**

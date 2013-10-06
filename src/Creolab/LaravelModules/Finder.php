@@ -56,7 +56,7 @@ class Finder{
 	public function scan()
 	{
 		// Get all directories in modules path
-		$directories = $this->app['files']->directories(base_path('app/modules'));
+		$directories = $this->app['files']->directories(base_path($this->app['config']->get('modules::path')));
 
 		if ($directories)
 		{
@@ -66,10 +66,42 @@ class Finder{
 				if ($this->app['files']->exists($directory . '/module.json'))
 				{
 					$name                 = pathinfo($directory, PATHINFO_BASENAME);
-					$this->modules[$name] = new Module($name, $directory . '/module.json', $this->app);
+					$this->modules[$name] = new Module($name, $directory, null, $this->app);
 				}
 			}
 		}
+
+		return $this->modules;
+	}
+
+	/**
+	 * Get modules from config array
+	 * @return array
+	 */
+	public function manual()
+	{
+		$modules = $this->app['config']->get('modules::modules');
+
+		if ($modules)
+		{
+			foreach ($modules as $key => $module)
+			{
+				// Get name first
+				if     (is_string($module)) $name = $module;
+				elseif (is_array($module))  $name = $key;
+
+				// The path
+				$path = base_path($this->app['config']->get('modules::path') . '/' . $name);
+
+				// Then the definition
+				$definition = (is_array($module)) ? $module : array();
+
+				// Create instance
+				$this->modules[$name] = new Module($name, $path, $definition, $this->app);
+			}
+		}
+
+		return $this->modules;
 	}
 
 	/**
