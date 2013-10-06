@@ -55,7 +55,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		$this->path = $path;
 
 		// Get definition
-		if (is_string($definition) and $definition)
+		if ($path and ! $definition)
 		{
 			$this->definitionPath = $path . '/module.json';
 		}
@@ -76,9 +76,16 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	{
 		if ($this->app['config']->get('modules::mode') == 'auto')
 		{
-			$this->definition = @json_decode($this->app['files']->get($this->definitionPath), true);
+			if ($this->definitionPath)
+			{
+				$this->definition = @json_decode($this->app['files']->get($this->definitionPath), true);
 
-			if ( ! $this->definition or (isset($this->definition['enabled']) and $this->definition['enabled'] === false))
+				if ( ! $this->definition or (isset($this->definition['enabled']) and $this->definition['enabled'] === false))
+				{
+					$this->enabled = false;
+				}
+			}
+			else
 			{
 				$this->enabled = false;
 			}
