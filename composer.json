@@ -1,6 +1,7 @@
 {
     "name": "creolab/laravel-modules",
-    "description": "",
+    "keywords": ["modules", "laravel"],
+    "description": "Application specific modules in Laravel 4",
     "authors": [
         {
             "name": "Boris Strahija",
