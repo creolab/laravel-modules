@@ -36,6 +36,13 @@ class ModuleCollection extends Collection {
 	 */
 	public function registerModules()
 	{
+		// First we need to sort the modules
+		$this->sort(function($a, $b) {
+			if ($a->order == $b->order) return 0;
+			else                        return $a->order < $b->order ? -1 : 1;
+		});
+
+		// Then register each one
 		foreach ($this->items as $module)
 		{
 			$module->register();

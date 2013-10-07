@@ -39,6 +39,12 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	protected $enabled = true;
 
 	/**
+	 * Order to register the module
+	 * @var integer
+	 */
+	public $order = 0;
+
+	/**
 	 * IoC
 	 * @var Illuminate\Foundation\Application
 	 */
@@ -98,6 +104,13 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			}
 		}
 
+		// Add name to defintion
+		if ( ! isset($this->definition['name'])) $this->definition['name'] = $this->name;
+
+		// Assign order number
+		if ( ! isset($this->definition['order'])) $this->definition['order'] = $this->order = 0;
+		else                                      $this->definition['order'] = $this->order = (int) $this->definition['order'];
+
 		return $this->definition;
 	}
 
@@ -138,6 +151,17 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	{
 		if ($path) return $this->path . '/' . ltrim($path, '/');
 		else       return $this->path;
+	}
+
+	/**
+	 * Get definition value
+	 * @param  stirng $key
+	 * @return mixed
+	 */
+	public function def($key = null)
+	{
+		if ($key) return isset($this->definition[$key]) ? $this->definition[$key] : null;
+		else      return $this->definition;
 	}
 
 }
