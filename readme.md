@@ -16,7 +16,7 @@ Also you need to add your modules directory to the composer autoloader:
         ]
     }
 
-This also means you need to run "composer dump" everytime you add a new class to your module.
+This also means you need to run "composer dump" every time you add a new class to your module.
 
 By default you can add a "modules" directory in your "app" directory. So as an example this is a structure for one of my projects:
 
@@ -43,3 +43,13 @@ The first thing will probably be some kind of a bootstrap class.
 For now take a look at the example implementation, and please provide feedback ;)
 
 [https://github.com/bstrahija/laravel-modules-example](https://github.com/bstrahija/laravel-modules-example)
+
+# Optimization
+
+By default the package scans the "modules" directory for "modules.json" files. This is not the best solution way to discover modules, and I do plan to implement some kind of a caching to the Finder class.
+To optimize the modules Finder even more you can publish the package configuration, and add the modules and definitions directly inside the configuration file by running:
+
+    php artisan config:publish creolab/laravel-modules
+
+And the editing the file "app/config/packages/creolab/laravel-modules/config.php".
+You just need to change the "mode" parameter from "auto" to "manual", and list your modules under the "modules" key. An example of that is already provided inside the configuration.
