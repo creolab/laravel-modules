@@ -6,13 +6,7 @@ use Illuminate\Foundation\Application;
  * Module finder
  * @author Boris Strahija <bstrahija@gmail.com>
  */
-class Finder{
-
-	/**
-	 * IoC
-	 * @var Illuminate\Foundation\Application
-	 */
-	protected $app;
+class Finder {
 
 	/**
 	 * Modules collection
@@ -21,13 +15,53 @@ class Finder{
 	protected $modules;
 
 	/**
+	 * The modules manifest
+	 * @var Manifest
+	 */
+	protected $manifest;
+
+	/**
+	 * IoC
+	 * @var Illuminate\Foundation\Application
+	 */
+	protected $app;
+
+	/**
 	 * Initialize the finder
 	 * @param Application $app
 	 */
 	public function __construct(Application $app)
 	{
-		$this->app     = $app;
-		$this->modules = new ModuleCollection($app);
+		$this->app      = $app;
+		$this->modules  = new ModuleCollection($app);
+		$this->manifest = new Manifest($app);
+	}
+
+	/**
+	 * Start finder
+	 * @return void
+	 */
+	public function start()
+	{
+		if ($this->app['config']->get('modules::mode') == 'auto')
+		{
+			$this->app['modules']->scan();
+		}
+		elseif ($this->app['config']->get('modules::mode') == 'manifest')
+		{
+			if ($manifest = $this->manifest->toArray())
+			{
+				$this->app['modules']->manual($this->manifest->toArray());
+			}
+			else
+			{
+				$this->app['modules']->scan();
+			}
+		}
+		else
+		{
+			$this->app['modules']->manual();
+		}
 	}
 
 	/**
@@ -69,6 +103,9 @@ class Finder{
 					$this->modules[$name] = new Module($name, $directory, null, $this->app);
 				}
 			}
+
+			// Save the manifest file
+			$this->saveManifest();
 		}
 
 		return $this->modules;
@@ -78,9 +115,10 @@ class Finder{
 	 * Get modules from config array
 	 * @return array
 	 */
-	public function manual()
+	public function manual($config = null)
 	{
-		$modules = $this->app['config']->get('modules::modules');
+		if ( ! $config) $modules = $this->app['config']->get('modules::modules');
+		else            $modules = $config;
 
 		if ($modules)
 		{
@@ -105,6 +143,34 @@ class Finder{
 	}
 
 	/**
+	 * Return manifest object
+	 * @return Manifest
+	 */
+	public function manifest($module = null)
+	{
+		return $this->manifest->toArray($module);
+	}
+
+	/**
+	 * Save the manifest file
+	 * @param  array $modules
+	 * @return void
+	 */
+	public function saveManifest($modules = null)
+	{
+		$this->manifest->save($this->modules);
+	}
+
+	/**
+	 * Delete the manifest file
+	 * @return void
+	 */
+	public function deleteManifest()
+	{
+		$this->manifest->delete();
+	}
+
+	/**
 	 * Register all modules in collection
 	 * @return void
 	 */
@@ -120,7 +186,7 @@ class Finder{
 	 */
 	public function logDebug($message)
 	{
-		return $this->log($message);
+		$this->log($message);
 	}
 
 	/**
@@ -130,7 +196,7 @@ class Finder{
 	 */
 	public function logError($message)
 	{
-		return $this->log($message, 'error');
+		$this->log($message, 'error');
 	}
 
 	/**
@@ -146,8 +212,8 @@ class Finder{
 			$namespace = 'MODULES';
 			$message   = "[$namespace] $message";
 
-			if ($type == 'error') return $this->app['log']->error($message);
-			else                  return $this->app['log']->debug($message);
+			if ($type == 'error') $this->app['log']->error($message);
+			else                  $this->app['log']->debug($message);
 		}
 	}
 

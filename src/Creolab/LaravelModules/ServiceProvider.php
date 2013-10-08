@@ -16,15 +16,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	{
 		$this->package('creolab/laravel-modules', 'modules', __DIR__ . '/../../');
 
+		// Register commands
+		$this->bootCommands();
+
 		// Auto scan if specified
-		if ($this->app['config']->get('modules::mode') == 'auto')
-		{
-			$this->app['modules']->scan();
-		}
-		else
-		{
-			$this->app['modules']->manual();
-		}
+		$this->app['modules']->start();
 
 		// And finally register all modules
 		$this->app['modules']->register();
@@ -41,6 +37,28 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 		{
 			return new Finder($app, $app['files'], $app['config']);
 		});
+	}
+
+	/**
+	 * Register all available commands
+	 * @return void
+	 */
+	public function bootCommands()
+	{
+		// Add modules command to IoC
+		$this->app['modules.list'] = $this->app->share(function($app)
+		{
+			return new ModulesCommand();
+		});
+
+		// Add scan command to IoC
+		$this->app['modules.scan'] = $this->app->share(function($app)
+		{
+			return new ModulesScanCommand();
+		});
+
+		// Now register all the commands
+		$this->commands('modules.list', 'modules.scan');
 	}
 
 	/**

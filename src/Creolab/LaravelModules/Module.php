@@ -80,7 +80,10 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function readDefinition()
 	{
-		if ($this->app['config']->get('modules::mode') == 'auto')
+		// Read mode from configuration
+		$mode = $this->app['config']->get('modules::mode');
+
+		if ($mode == 'auto' or ($mode == 'manifest' and ! $this->app['modules']->manifest()))
 		{
 			if ($this->definitionPath)
 			{
@@ -143,6 +146,15 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	}
 
 	/**
+	 * Return name of module
+	 * @return string
+	 */
+	public function name()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Module path
 	 * @param  string $path
 	 * @return string
@@ -154,12 +166,23 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	}
 
 	/**
+	 * Check if module is enabled
+	 * @return boolean
+	 */
+	public function enabled()
+	{
+		return (bool) $this->enabled;
+	}
+
+	/**
 	 * Get definition value
 	 * @param  stirng $key
 	 * @return mixed
 	 */
 	public function def($key = null)
 	{
+		if ( ! isset($this->definition['enabled'])) $this->definition['enabled'] = $this->enabled;
+
 		if ($key) return isset($this->definition[$key]) ? $this->definition[$key] : null;
 		else      return $this->definition;
 	}

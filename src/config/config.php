@@ -10,7 +10,7 @@ return array(
 	/**
 	 * If set to 'auto', the modules path will be scanned for modules
 	 */
-	'mode' => 'auto',
+	'mode' => 'manifest',
 
 	/**
 	 * In case the auto detect mode is disabled, these modules will be loaded
@@ -25,6 +25,6 @@ return array(
 	/**
 	 * Debug mode
 	 */
-	'debug' => true,
+	'debug' => false,
 
 );
