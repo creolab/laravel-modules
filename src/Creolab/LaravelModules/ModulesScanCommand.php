@@ -1,6 +1,7 @@
 <?php namespace Creolab\LaravelModules;
 
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Composer;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -40,7 +41,7 @@ class ModulesScanCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->line('Scanning modules...');
+		$this->info('Scanning modules');
 
 		// Get table helper
 		$this->table = $this->getHelperSet()->get('table');
@@ -56,6 +57,12 @@ class ModulesScanCommand extends Command {
 		{
 			return $this->error("Your application doesn't have any valid modules.");
 		}
+
+		// Also run composer dump-autoload
+		$composer = new Composer(app('files'));
+		$this->info('Generating optimized class loader');
+		$composer->dumpOptimized();
+		$this->line('');
 
 		// Display number of found modules
 		$this->info('Found ' . count($this->modules) . ' modules:');
