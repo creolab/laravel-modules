@@ -44,6 +44,19 @@ For now take a look at the example implementation, and please provide feedback ;
 
 [https://github.com/bstrahija/laravel-modules-example](https://github.com/bstrahija/laravel-modules-example)
 
+# Commands
+
+There are 2 commands available through this package:
+
+    php artisan modules
+
+Which simply diplays all current modules depending on the mode set in the configuration. And:
+
+    php artisan modules:scan
+
+Which is only required if you have your modules setup in the **"manifest"** mode (see below).
+This command scans the modules exactly like in the **"auto"** mode, but caches the results into a manifest file.
+
 # Optimization
 
 By default the package scans the **"modules"** directory for **"modules.json"** files. This is not the best solution way to discover modules, and I do plan to implement some kind of a caching to the Finder class.
@@ -53,3 +66,10 @@ To optimize the modules Finder even more you can publish the package configurati
 
 And the editing the file **"app/config/packages/creolab/laravel-modules/config.php"**.
 You just need to change the **"mode"** parameter from **"auto"** to **"manual"**, and list your modules under the **"modules"** key. An example of that is already provided inside the configuration.
+
+## Modules Manifest
+
+Another possible mode is **"manifest"** which basically writes a JSON manifest file in your Laravel storage directory that contains all the modules definitions.
+This is only done the first time and to update the manifest file you need to either delete it, or rescan the modules via the following command:
+
+    php artisan modules:scan
