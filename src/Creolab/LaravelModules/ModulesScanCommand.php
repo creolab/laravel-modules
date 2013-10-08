@@ -2,11 +2,12 @@
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Composer;
+use Illuminate\Foundation\Application;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
-* Modules console commands
+* Scan available modules
 * @author Boris Strahija <bstrahija@gmail.com>
 */
 class ModulesScanCommand extends Command {
@@ -36,6 +37,22 @@ class ModulesScanCommand extends Command {
 	protected $manifestPath;
 
 	/**
+	 * IoC
+	 * @var Illuminate\Foundation\Application
+	 */
+	protected $app;
+
+	/**
+	 * DI
+	 * @param Application $app
+	 */
+	public function __construct(Application $app)
+	{
+		parent::__construct();
+		$this->app = $app;
+	}
+
+	/**
 	 * Execute the console command.
 	 * @return void
 	 */
@@ -47,10 +64,10 @@ class ModulesScanCommand extends Command {
 		$this->table = $this->getHelperSet()->get('table');
 
 		// Delete the manifest
-		app('modules')->deleteManifest();
+		$this->app['modules']->deleteManifest();
 
 		// Run the scanner
-		$this->modules = app('modules')->scan();
+		$this->modules = $this->app['modules']->scan();
 
 		// Return error if no modules found
 		if (count($this->modules) == 0)
@@ -59,7 +76,7 @@ class ModulesScanCommand extends Command {
 		}
 
 		// Also run composer dump-autoload
-		$composer = new Composer(app('files'));
+		$composer = new Composer($this->app['files']);
 		$this->info('Generating optimized class loader');
 		$composer->dumpOptimized();
 		$this->line('');

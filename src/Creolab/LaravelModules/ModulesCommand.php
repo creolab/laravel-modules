@@ -1,11 +1,12 @@
 <?php namespace Creolab\LaravelModules;
 
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Application;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
-* Modules console commands
+* List modules
 * @author Boris Strahija <bstrahija@gmail.com>
 */
 class ModulesCommand extends Command {
@@ -29,10 +30,20 @@ class ModulesCommand extends Command {
 	protected $modules;
 
 	/**
-	 * Path to the modules monifest
-	 * @var string
+	 * IoC
+	 * @var Illuminate\Foundation\Application
 	 */
-	protected $manifestPath;
+	protected $app;
+
+	/**
+	 * DI
+	 * @param Application $app
+	 */
+	public function __construct(Application $app)
+	{
+		parent::__construct();
+		$this->app = $app;
+	}
 
 	/**
 	 * Execute the console command.
@@ -61,7 +72,7 @@ class ModulesCommand extends Command {
 	{
 		$results = array();
 
-		foreach(app('modules')->modules() as $name => $module)
+		foreach($this->app['modules']->modules() as $name => $module)
 		{
 			$path = str_replace(app()->make('path.base'), '', $module->path());
 

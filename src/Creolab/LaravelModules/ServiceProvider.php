@@ -45,20 +45,26 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function bootCommands()
 	{
-		// Add modules command to IoC
+		// Add modules command
 		$this->app['modules.list'] = $this->app->share(function($app)
 		{
-			return new ModulesCommand();
+			return new ModulesCommand($app);
 		});
 
-		// Add scan command to IoC
+		// Add scan command
 		$this->app['modules.scan'] = $this->app->share(function($app)
 		{
-			return new ModulesScanCommand();
+			return new ModulesScanCommand($app);
+		});
+
+		// Add publish command
+		$this->app['modules.publish'] = $this->app->share(function($app)
+		{
+			return new ModulesPublishCommand($app);
 		});
 
 		// Now register all the commands
-		$this->commands('modules.list', 'modules.scan');
+		$this->commands(array('modules.list', 'modules.scan', 'modules.publish'));
 	}
 
 	/**
