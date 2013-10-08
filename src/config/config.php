@@ -4,6 +4,7 @@ return array(
 
 	/**
 	 * The path that will contain our modules
+	 * This can also be an array with multiple paths
 	 */
 	'path' => 'app/modules',
 

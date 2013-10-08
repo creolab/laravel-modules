@@ -89,23 +89,34 @@ class Finder {
 	 */
 	public function scan()
 	{
-		// Get all directories in modules path
-		$directories = $this->app['files']->directories(base_path($this->app['config']->get('modules::path')));
+		// Get the modules directory paths
+		$modulesPaths = $this->app['config']->get('modules::path');
+		if ( ! is_array($modulesPaths)) $modulesPaths = array($modulesPaths);
 
-		if ($directories)
+		// Now prepare an array with all directories
+		$paths = array();
+		foreach ($modulesPaths as $modulesPath) $paths[$modulesPath] = $this->app['files']->directories(base_path($modulesPath));
+
+		if ($paths)
 		{
-			foreach ($directories as $directory)
+			foreach ($paths as $path => $directories)
 			{
-				// Check if dir contains a module definition file
-				if ($this->app['files']->exists($directory . '/module.json'))
+				if ($directories)
 				{
-					$name                 = pathinfo($directory, PATHINFO_BASENAME);
-					$this->modules[$name] = new Module($name, $directory, null, $this->app);
+					foreach ($directories as $directory)
+					{
+						// Check if dir contains a module definition file
+						if ($this->app['files']->exists($directory . '/module.json'))
+						{
+							$name                 = pathinfo($directory, PATHINFO_BASENAME);
+							$this->modules[$name] = new Module($name, $directory, null, $this->app);
+						}
+					}
+
+					// Save the manifest file
+					$this->saveManifest();
 				}
 			}
-
-			// Save the manifest file
-			$this->saveManifest();
 		}
 
 		return $this->modules;
