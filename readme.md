@@ -67,9 +67,22 @@ To optimize the modules Finder even more you can publish the package configurati
 And the editing the file **"app/config/packages/creolab/laravel-modules/config.php"**.
 You just need to change the **"mode"** parameter from **"auto"** to **"manual"**, and list your modules under the **"modules"** key. An example of that is already provided inside the configuration.
 
+You can also add multiple module paths as an array, but do note that if a module has the same name, there will be problems.
+
 ## Modules Manifest
 
 Another possible mode is **"manifest"** which basically writes a JSON manifest file in your Laravel storage directory that contains all the modules definitions.
 This is only done the first time and to update the manifest file you need to either delete it, or rescan the modules via the following command:
 
     php artisan modules:scan
+
+# Assets
+
+Just recently the ability to publish public assets for each module has been added. Just run:
+
+    php artisan modules:publish
+
+And all modules that contain an **"assets"** directory will be published to the Laravel public directory.
+You can also publish assets for individual modules by providing the module name:
+
+    php artisan modules:publish content
