@@ -19,11 +19,18 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 		// Register commands
 		$this->bootCommands();
 
-		// Auto scan if specified
-		$this->app['modules']->start();
+		try
+		{
+			// Auto scan if specified
+			$this->app['modules']->start();
 
-		// And finally register all modules
-		$this->app['modules']->register();
+			// And finally register all modules
+			$this->app['modules']->register();
+		}
+		catch (\Exception $e)
+		{
+			$this->app['modules']->logError("There was an error when starting modules: [".$e->getMessage()."]");
+		}
 	}
 
 	/**
