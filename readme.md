@@ -86,3 +86,5 @@ And all modules that contain an **"assets"** directory will be published to the 
 You can also publish assets for individual modules by providing the module name:
 
     php artisan modules:publish content
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
