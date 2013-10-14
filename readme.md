@@ -40,6 +40,12 @@ By default you can add a **"modules"** directory in your **"app"** directory. So
 Note that every module has a **"module.json"** file, in which you can enable/disable the module. I plan on adding more meta data to these module definitions, but I need feedback as to what to put in there.
 The first thing will probably be some kind of a bootstrap class.
 
+One of the available option is the order in which the modules are loaded. This can be done simply by adding the following to your modules.json file:
+
+    "order": 5
+
+The order defaults to 0, so keep that in mind if you don't define it.
+
 For now take a look at the example implementation, and please provide feedback ;)
 
 [https://github.com/bstrahija/laravel-modules-example](https://github.com/bstrahija/laravel-modules-example)
@@ -86,5 +92,7 @@ And all modules that contain an **"assets"** directory will be published to the 
 You can also publish assets for individual modules by providing the module name:
 
     php artisan modules:publish content
+
+
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
