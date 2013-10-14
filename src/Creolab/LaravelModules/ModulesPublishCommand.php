@@ -60,18 +60,25 @@ class ModulesPublishCommand extends Command {
 
 		foreach ($modules as $module)
 		{
-			if ($this->app['files']->exists($module->path('assets')))
+			if ($module)
 			{
-				// Prepare params
-				$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/assets";
-				$name = 'module/' . $module->name();
+				if ($this->app['files']->exists($module->path('assets')))
+				{
+					// Prepare params
+					$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/assets";
+					$name = 'module/' . $module->name();
 
-				// Run command
-				$this->call('asset:publish', array('package' => $name, '--path' => $path));
+					// Run command
+					$this->call('asset:publish', array('package' => $name, '--path' => $path));
+				}
+				else
+				{
+					$this->line("Module <info>'" . $module->name() . "'</info> has no assets available.");
+				}
 			}
 			else
 			{
-				$this->line("Module <info>'" . $module->name() . "'</info> has no assets available.");
+				$this->error("Module '" . $moduleName . "' does not exist.");
 			}
 		}
 	}
