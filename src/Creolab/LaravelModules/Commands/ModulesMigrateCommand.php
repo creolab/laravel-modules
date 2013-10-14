@@ -40,17 +40,17 @@ class ModulesMigrateCommand extends AbstractCommand {
 		{
 			if ($module)
 			{
-				if ($this->app['files']->exists($module->path('database/migrations')))
+				if ($this->app['files']->exists($module->path('migrations')))
 				{
 					// Prepare params
-					$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/database/migrations";
+					$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/migrations";
 
 					// // Run command
 					$this->call('migrate', array('--path' => $path));
 				}
 				else
 				{
-					$this->line("Module <info>'" . $module->name() . "'</info> has no migrations available.");
+					$this->line("Module <info>'" . $module->name() . "'</info> has no migrations.");
 				}
 			}
 			else
