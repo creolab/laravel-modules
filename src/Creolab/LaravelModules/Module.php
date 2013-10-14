@@ -128,6 +128,9 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			// Register module as a package
 			$this->package('app/' . $this->name, $this->name, $this->path());
 
+			// Register service provider
+			$this->registerProvider();
+
 			// Require module helpers
 			$helpers = $this->path('helpers.php');
 			if ($this->app['files']->exists($helpers)) require $helpers;
@@ -142,6 +145,18 @@ class Module extends \Illuminate\Support\ServiceProvider {
 
 			// Log it
 			$this->app['modules']->logDebug('Module "' . $this->name . '" has been registered.');
+		}
+	}
+
+	/**
+	 * Register service provider for module
+	 * @return void
+	 */
+	public function registerProvider()
+	{
+		if ($provider = $this->def('provider'))
+		{
+			$this->app->register($instance = new $provider($this->app));
 		}
 	}
 
