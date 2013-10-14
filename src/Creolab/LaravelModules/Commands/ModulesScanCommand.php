@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 * Scan available modules
 * @author Boris Strahija <bstrahija@gmail.com>
 */
-class ModulesScanCommand extends Command {
+class ModulesScanCommand extends AbstractCommand {
 
 	/**
 	 * Name of the command
@@ -25,32 +25,10 @@ class ModulesScanCommand extends Command {
 	protected $description = 'Scan modules and cache module meta data.';
 
 	/**
-	 * List of all available modules
-	 * @var array
-	 */
-	protected $modules;
-
-	/**
 	 * Path to the modules monifest
 	 * @var string
 	 */
 	protected $manifestPath;
-
-	/**
-	 * IoC
-	 * @var Illuminate\Foundation\Application
-	 */
-	protected $app;
-
-	/**
-	 * DI
-	 * @param Application $app
-	 */
-	public function __construct(Application $app)
-	{
-		parent::__construct();
-		$this->app = $app;
-	}
 
 	/**
 	 * Execute the console command.
@@ -86,52 +64,6 @@ class ModulesScanCommand extends Command {
 
 		// Display the modules info
 		$this->displayModules($this->getModules());
-	}
-
-	/**
-	 * Reformats the modules list for table display
-	 * @return array
-	 */
-	public function getModules()
-	{
-		$results = array();
-
-		foreach($this->modules as $name => $module)
-		{
-			$path = str_replace(app()->make('path.base'), '', $module->path());
-
-			$results[] = array(
-				'name'    => $name,
-				'path'    => $path,
-				'order'   => $module->order,
-				'enabled' => $module->enabled() ? 'true' : '',
-			);
-		}
-
-		return array_filter($results);
-	}
-
-	/**
-	 * Display a module info table in the console
-	 * @param  array $modules
-	 * @return void
-	 */
-	public function displayModules($modules)
-	{
-		$headers = array('Name', 'Path', 'Order', 'Enabled');
-
-		$this->table->setHeaders($headers)->setRows($modules);
-
-		$this->table->render($this->getOutput());
-	}
-
-	/**
-	 * Get the console command options.
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array();
 	}
 
 }

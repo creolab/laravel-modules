@@ -70,8 +70,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 			return new Commands\ModulesPublishCommand($app);
 		});
 
+		// Add migrate command
+		$this->app['modules.migrate'] = $this->app->share(function($app)
+		{
+			return new Commands\ModulesMigrateCommand($app);
+		});
+
 		// Now register all the commands
-		$this->commands(array('modules.list', 'modules.scan', 'modules.publish'));
+		$this->commands(array('modules.list', 'modules.scan', 'modules.publish', 'modules.migrate'));
 	}
 
 	/**

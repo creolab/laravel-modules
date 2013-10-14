@@ -10,19 +10,19 @@ use Symfony\Component\Console\Input\InputArgument;
 * Modules console commands
 * @author Boris Strahija <bstrahija@gmail.com>
 */
-class ModulesPublishCommand extends AbstractCommand {
+class ModulesMigrateCommand extends AbstractCommand {
 
 	/**
 	 * Name of the command
 	 * @var string
 	 */
-	protected $name = 'modules:publish';
+	protected $name = 'modules:migrate';
 
 	/**
 	 * Command description
 	 * @var string
 	 */
-	protected $description = 'Publish public assets for modules.';
+	protected $description = 'Run migrations for modules.';
 
 	/**
 	 * Execute the console command.
@@ -30,7 +30,7 @@ class ModulesPublishCommand extends AbstractCommand {
 	 */
 	public function fire()
 	{
-		$this->info('Publishing module assets');
+		$this->info('Migrating modules');
 
 		// Get all modules or 1 specific
 		if ($moduleName = $this->input->getArgument('module')) $modules = array(app('modules')->module($moduleName));
@@ -40,18 +40,17 @@ class ModulesPublishCommand extends AbstractCommand {
 		{
 			if ($module)
 			{
-				if ($this->app['files']->exists($module->path('assets')))
+				if ($this->app['files']->exists($module->path('database/migrations')))
 				{
 					// Prepare params
-					$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/assets";
-					$name = 'module/' . $module->name();
+					$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/database/migrations";
 
-					// Run command
-					$this->call('asset:publish', array('package' => $name, '--path' => $path));
+					// // Run command
+					$this->call('migrate', array('--path' => $path));
 				}
 				else
 				{
-					$this->line("Module <info>'" . $module->name() . "'</info> has no assets available.");
+					$this->line("Module <info>'" . $module->name() . "'</info> has no migrations available.");
 				}
 			}
 			else
@@ -68,17 +67,8 @@ class ModulesPublishCommand extends AbstractCommand {
 	protected function getArguments()
 	{
 		return array(
-			array('module', InputArgument::OPTIONAL, 'The name of module being published.'),
+			array('module', InputArgument::OPTIONAL, 'The name of module being migrated.'),
 		);
-	}
-
-	/**
-	 * Get the console command options.
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array();
 	}
 
 }
