@@ -1,4 +1,4 @@
-<?php namespace Creolab\LaravelModules;
+<?php namespace Creolab\LaravelModules\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
@@ -79,6 +79,7 @@ class ModulesCommand extends Command {
 			$results[] = array(
 				'name'    => $name,
 				'path'    => $path,
+				'order'   => $module->order,
 				'enabled' => $module->enabled() ? 'true' : '',
 			);
 		}
@@ -93,7 +94,7 @@ class ModulesCommand extends Command {
 	 */
 	public function displayModules($modules)
 	{
-		$headers = array('Name', 'Path', 'Enabled');
+		$headers = array('Name', 'Path', 'Order', 'Enabled');
 
 		$this->table->setHeaders($headers)->setRows($modules);
 

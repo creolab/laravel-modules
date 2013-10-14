@@ -55,19 +55,19 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 		// Add modules command
 		$this->app['modules.list'] = $this->app->share(function($app)
 		{
-			return new ModulesCommand($app);
+			return new Commands\ModulesCommand($app);
 		});
 
 		// Add scan command
 		$this->app['modules.scan'] = $this->app->share(function($app)
 		{
-			return new ModulesScanCommand($app);
+			return new Commands\ModulesScanCommand($app);
 		});
 
 		// Add publish command
 		$this->app['modules.publish'] = $this->app->share(function($app)
 		{
-			return new ModulesPublishCommand($app);
+			return new Commands\ModulesPublishCommand($app);
 		});
 
 		// Now register all the commands
