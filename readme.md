@@ -93,6 +93,18 @@ You can also publish assets for individual modules by providing the module name:
 
     php artisan modules:publish content
 
+# Migrations
 
+Every module can have it's own migrations, and they need to be in the module/migrations directory. So for example if you want to create a migration that creates a user table for the auth module:
+
+    php artisan migrate:make create_users_table --path=app/modules/auth/migrations --table=users --create
+
+And to run all module migrations do this:
+
+    php artisan modules:migrate
+
+Or to run migrations for a specific module:
+
+    php artisan modules:migrate auth
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
