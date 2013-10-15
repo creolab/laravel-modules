@@ -57,7 +57,7 @@ class ModulesGenerateCommand extends AbstractCommand {
 			$this->call('generate:migration', array('name' => $resource, '--path' => $dirPath));
 		}
 
-		// Generate a model
+		// Generate a view
 		if ($type == 'view')
 		{
 			$dirPath = $modulePath . '/' . $moduleName . '/views';
