@@ -143,6 +143,14 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			$routes = $this->path('routes.php');
 			if ($this->app['files']->exists($routes)) require $routes;
 
+			// Require module bindings
+			$bindings = $this->path('bindings.php');
+			if ($this->app['files']->exists($bindings)) require $bindings;
+
+			// Require module observers/events
+			$observers = $this->path('observers.php');
+			if ($this->app['files']->exists($observers)) require $observers;
+
 			// Log it
 			$this->app['modules']->logDebug('Module "' . $this->name . '" has been registered.');
 		}
