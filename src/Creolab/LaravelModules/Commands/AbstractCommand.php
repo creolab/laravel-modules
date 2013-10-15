@@ -82,4 +82,17 @@ abstract class AbstractCommand extends Command {
 
 		$this->table->render($this->getOutput());
 	}
+
+	/**
+	 * Dump autoload classes
+	 * @return void
+	 */
+	public function dumpAutoload()
+	{
+		// Also run composer dump-autoload
+		$composer = new Composer($this->app['files']);
+		$this->info('Generating optimized class loader');
+		$composer->dumpOptimized();
+		$this->line('');
+	}
 }

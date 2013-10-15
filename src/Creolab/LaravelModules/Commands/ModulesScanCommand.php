@@ -54,10 +54,7 @@ class ModulesScanCommand extends AbstractCommand {
 		}
 
 		// Also run composer dump-autoload
-		$composer = new Composer($this->app['files']);
-		$this->info('Generating optimized class loader');
-		$composer->dumpOptimized();
-		$this->line('');
+		$this->dumpAutoload();
 
 		// Display number of found modules
 		$this->info('Found ' . count($this->modules) . ' modules:');

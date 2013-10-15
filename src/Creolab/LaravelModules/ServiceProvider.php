@@ -76,8 +76,20 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 			return new Commands\ModulesMigrateCommand($app);
 		});
 
+		// Add create command
+		$this->app['modules.create'] = $this->app->share(function($app)
+		{
+			return new Commands\ModulesCreateCommand($app);
+		});
+
+		// Add generate command
+		$this->app['modules.generate'] = $this->app->share(function($app)
+		{
+			return new Commands\ModulesGenerateCommand($app);
+		});
+
 		// Now register all the commands
-		$this->commands(array('modules.list', 'modules.scan', 'modules.publish', 'modules.migrate'));
+		$this->commands(array('modules.list', 'modules.scan', 'modules.publish', 'modules.migrate', 'modules.create', 'modules.generate'));
 	}
 
 	/**
