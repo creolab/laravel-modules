@@ -139,6 +139,10 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			$filters = $this->path('filters.php');
 			if ($this->app['files']->exists($filters)) require $filters;
 
+			// Require module composers
+			$composers = $this->path('composers.php');
+			if ($this->app['files']->exists($composers)) require $composers;
+
 			// Require module routes
 			$routes = $this->path('routes.php');
 			if ($this->app['files']->exists($routes)) require $routes;
