@@ -40,6 +40,16 @@ By default you can add a **"modules"** directory in your **"app"** directory. So
 Note that every module has a **"module.json"** file, in which you can enable/disable the module. I plan on adding more meta data to these module definitions, but I need feedback as to what to put in there.
 The first thing will probably be some kind of a bootstrap class.
 
+If you want to have your modules in more that 1 directories you need to change the packages config file as following:
+
+    'path' => array(
+        'app/modules',
+        'public/site',
+        'another/folder/containing/modules',
+    ),
+
+And don't forget to add those directories to your autoload list inside the composer.json file.
+
 One of the available option is the order in which the modules are loaded. This can be done simply by adding the following to your modules.json file:
 
     "order": 5
