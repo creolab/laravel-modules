@@ -24,6 +24,18 @@ return array(
 	),
 
 	/**
+	 * Default files that are included automatically for each module
+	 */
+	'include' => array(
+		'helpers.php',
+		'filters.php',
+		'composers.php',
+		'routes.php',
+		'bindings.php',
+		'observers.php',
+	),
+
+	/**
 	 * Debug mode
 	 */
 	'debug' => false,

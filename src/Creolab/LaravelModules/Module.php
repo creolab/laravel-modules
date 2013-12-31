@@ -131,29 +131,17 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			// Register service provider
 			$this->registerProvider();
 
-			// Require module helpers
-			$helpers = $this->path('helpers.php');
-			if ($this->app['files']->exists($helpers)) require $helpers;
+			// Get files for inclusion
+			$moduleInclude = (array) array_get($this->definition, 'include');
+			$globalInclude = $this->app['config']->get('modules::include');
+			$include       = array_merge($globalInclude, $moduleInclude);
 
-			// Require module filters
-			$filters = $this->path('filters.php');
-			if ($this->app['files']->exists($filters)) require $filters;
-
-			// Require module composers
-			$composers = $this->path('composers.php');
-			if ($this->app['files']->exists($composers)) require $composers;
-
-			// Require module routes
-			$routes = $this->path('routes.php');
-			if ($this->app['files']->exists($routes)) require $routes;
-
-			// Require module bindings
-			$bindings = $this->path('bindings.php');
-			if ($this->app['files']->exists($bindings)) require $bindings;
-
-			// Require module observers/events
-			$observers = $this->path('observers.php');
-			if ($this->app['files']->exists($observers)) require $observers;
+			// Include all of them if they exist
+			foreach ($include as $file)
+			{
+				$path = $this->path($file);
+				if ($this->app['files']->exists($path)) require $path;
+			}
 
 			// Log it
 			$this->app['modules']->logDebug('Module "' . $this->name . '" has been registered.');
