@@ -85,6 +85,39 @@ You just need to change the **"mode"** parameter from **"auto"** to **"manual"**
 
 You can also add multiple module paths as an array, but do note that if a module has the same name, there will be problems.
 
+## Including files
+
+You can also specify which files in the module will be automatically included. Simply add a list of files inside your **modules.json** config:
+
+    {
+        "include": [
+            "breadcrumbs.php"
+        ]
+    }
+
+There are some defaults set on which files will be included if they exist. Take a look at the latest config file, and republish the configuration if needed. By default these files will be included:
+
+    'include' => array(
+        'helpers.php',
+        'filters.php',
+        'composers.php',
+        'routes.php',
+        'bindings.php',
+        'observers.php',
+    )
+
+So you have the choice to either add your custom files to the global configuration, which will look for these files in every module, or you can set it up on a per module basis by adding it to the **module.json** file.
+
+## Service providers
+
+A new addition is registering service providers for each module. Just add a line to your **module.json** file that looks something like this:
+
+    "provider": "App\\Modules\\Content\\ServiceProvider"
+
+These service provider classes work exactly like any other service provider added to your **app/config/app.php** configuration, so setup these classes by extending the **\Illuminate\Support\ServiceProvider** class and adding the appropriate methods.
+
+Keep in mind that you may have to run **composer dump** so you want get error on missing classes.
+
 ## Modules Manifest
 
 Another possible mode is **"manifest"** which basically writes a JSON manifest file in your Laravel storage directory that contains all the modules definitions.
