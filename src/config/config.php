@@ -28,11 +28,11 @@ return array(
 	 */
 	'include' => array(
 		'helpers.php',
+		'bindings.php',
+		'observers.php',
 		'filters.php',
 		'composers.php',
 		'routes.php',
-		'bindings.php',
-		'observers.php',
 	),
 
 	/**
