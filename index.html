@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640" />
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Laravel Modules by creolab</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/creolab/laravel-modules">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Laravel Modules</h1>
+            <h2>Application specific modules in Laravel 4</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/creolab/laravel-modules/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/creolab/laravel-modules/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h1>
+<a name="modules-in-laravel-4" class="anchor" href="#modules-in-laravel-4"><span class="octicon octicon-link"></span></a>Modules in Laravel 4</h1>
+
+<p>Application specific modules in Laravel 4 can be enabled by adding the following to your <strong>"composer.json"</strong> file:</p>
+
+<pre><code>"creolab/laravel-modules": "dev-master"
+</code></pre>
+
+<p>And by adding a new provider to your providers list in <strong>"app/config/app.php"</strong>:</p>
+
+<pre><code>'Creolab\LaravelModules\ServiceProvider',
+</code></pre>
+
+<p>Also you need to add your modules directory to the composer autoloader:</p>
+
+<pre><code>"autoload": {
+    "classmap": [
+        "app/modules"
+    ]
+}
+</code></pre>
+
+<p>This also means you need to run <strong>"composer dump"</strong> every time you add a new class to your module.</p>
+
+<p>By default you can add a <strong>"modules"</strong> directory in your <strong>"app"</strong> directory. So as an example this is a structure for one of my projects:</p>
+
+<pre><code>app/
+|-- modules
+    |-- auth
+        |-- controllers
+        |-- models
+        |-- views
+        |-- module.json
+    |-- content
+        |-- controllers
+        |-- models
+        |-- views
+        |-- module.json
+    |-- shop
+        |-- module.json
+    |-- system
+        |-- module.json
+</code></pre>
+
+<p>Note that every module has a <strong>"module.json"</strong> file, in which you can enable/disable the module. I plan on adding more meta data to these module definitions, but I need feedback as to what to put in there.
+The first thing will probably be some kind of a bootstrap class.</p>
+
+<p>If you want to have your modules in more that 1 directories you need to change the packages config file as following:</p>
+
+<pre><code>'path' =&gt; array(
+    'app/modules',
+    'public/site',
+    'another/folder/containing/modules',
+),
+</code></pre>
+
+<p>And don't forget to add those directories to your autoload list inside the composer.json file.</p>
+
+<p>One of the available option is the order in which the modules are loaded. This can be done simply by adding the following to your modules.json file:</p>
+
+<pre><code>"order": 5
+</code></pre>
+
+<p>The order defaults to 0, so keep that in mind if you don't define it.</p>
+
+<p>For now take a look at the example implementation, and please provide feedback ;)</p>
+
+<p><a href="https://github.com/bstrahija/laravel-modules-example">https://github.com/bstrahija/laravel-modules-example</a></p>
+
+<h1>
+<a name="commands" class="anchor" href="#commands"><span class="octicon octicon-link"></span></a>Commands</h1>
+
+<p>There are 2 commands available through this package:</p>
+
+<pre><code>php artisan modules
+</code></pre>
+
+<p>Which simply diplays all current modules depending on the mode set in the configuration. And:</p>
+
+<pre><code>php artisan modules:scan
+</code></pre>
+
+<p>Which is only required if you have your modules setup in the <strong>"manifest"</strong> mode (see below).
+This command scans the modules exactly like in the <strong>"auto"</strong> mode, but caches the results into a manifest file.</p>
+
+<h1>
+<a name="optimization" class="anchor" href="#optimization"><span class="octicon octicon-link"></span></a>Optimization</h1>
+
+<p>By default the package scans the <strong>"modules"</strong> directory for <strong>"modules.json"</strong> files. This is not the best solution way to discover modules, and I do plan to implement some kind of a caching to the Finder class.
+To optimize the modules Finder even more you can publish the package configuration, and add the modules and definitions directly inside the configuration file by running:</p>
+
+<pre><code>php artisan config:publish creolab/laravel-modules
+</code></pre>
+
+<p>And the editing the file <strong>"app/config/packages/creolab/laravel-modules/config.php"</strong>.
+You just need to change the <strong>"mode"</strong> parameter from <strong>"auto"</strong> to <strong>"manual"</strong>, and list your modules under the <strong>"modules"</strong> key. An example of that is already provided inside the configuration.</p>
+
+<p>You can also add multiple module paths as an array, but do note that if a module has the same name, there will be problems.</p>
+
+<h2>
+<a name="including-files" class="anchor" href="#including-files"><span class="octicon octicon-link"></span></a>Including files</h2>
+
+<p>You can also specify which files in the module will be automatically included. Simply add a list of files inside your <strong>modules.json</strong> config:</p>
+
+<pre><code>{
+    "include": [
+        "breadcrumbs.php"
+    ]
+}
+</code></pre>
+
+<p>There are some defaults set on which files will be included if they exist. Take a look at the latest config file, and republish the configuration if needed. By default these files will be included:</p>
+
+<pre><code>'include' =&gt; array(
+    'helpers.php',
+    'filters.php',
+    'composers.php',
+    'routes.php',
+    'bindings.php',
+    'observers.php',
+)
+</code></pre>
+
+<p>So you have the choice to either add your custom files to the global configuration, which will look for these files in every module, or you can set it up on a per module basis by adding it to the <strong>module.json</strong> file.</p>
+
+<h2>
+<a name="service-providers" class="anchor" href="#service-providers"><span class="octicon octicon-link"></span></a>Service providers</h2>
+
+<p>A new addition is registering service providers for each module. Just add a line to your <strong>module.json</strong> file that looks something like this:</p>
+
+<pre><code>"provider": "App\\Modules\\Content\\ServiceProvider"
+</code></pre>
+
+<p>These service provider classes work exactly like any other service provider added to your <strong>app/config/app.php</strong> configuration, so setup these classes by extending the <strong>\Illuminate\Support\ServiceProvider</strong> class and adding the appropriate methods.</p>
+
+<p>Keep in mind that you may have to run <strong>composer dump</strong> so you want get error on missing classes.</p>
+
+<h2>
+<a name="modules-manifest" class="anchor" href="#modules-manifest"><span class="octicon octicon-link"></span></a>Modules Manifest</h2>
+
+<p>Another possible mode is <strong>"manifest"</strong> which basically writes a JSON manifest file in your Laravel storage directory that contains all the modules definitions.
+This is only done the first time and to update the manifest file you need to either delete it, or rescan the modules via the following command:</p>
+
+<pre><code>php artisan modules:scan
+</code></pre>
+
+<h1>
+<a name="assets" class="anchor" href="#assets"><span class="octicon octicon-link"></span></a>Assets</h1>
+
+<p>Just recently the ability to publish public assets for each module has been added. Just run:</p>
+
+<pre><code>php artisan modules:publish
+</code></pre>
+
+<p>And all modules that contain an <strong>"assets"</strong> directory will be published to the Laravel public directory.
+You can also publish assets for individual modules by providing the module name:</p>
+
+<pre><code>php artisan modules:publish content
+</code></pre>
+
+<h1>
+<a name="migrations" class="anchor" href="#migrations"><span class="octicon octicon-link"></span></a>Migrations</h1>
+
+<p>Every module can have it's own migrations, and they need to be in the module/migrations directory. So for example if you want to create a migration that creates a user table for the auth module:</p>
+
+<pre><code>php artisan migrate:make create_users_table --path=app/modules/auth/migrations --table=users --create
+</code></pre>
+
+<p>And to run all module migrations do this:</p>
+
+<pre><code>php artisan modules:migrate
+</code></pre>
+
+<p>Or to run migrations for a specific module:</p>
+
+<pre><code>php artisan modules:migrate auth
+</code></pre>
+
+<p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png" alt="Bitdeli Badge"></a></p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/creolab">creolab</a> can be found on <a href="https://github.com/creolab/laravel-modules">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
