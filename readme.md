@@ -150,4 +150,22 @@ Or to run migrations for a specific module:
 
     php artisan modules:migrate auth
 
+You can also seed the database form the module if your **module.json** contains a seeder setting. Just pass the **--seed** option to the command:
+
+    php artisan modules:migrate --seed
+
+# Seeding
+
+The modules can also have seeders. Just create the class like you would create a normal seeder, place it somewhere inside your module, and be sure to run **composer dump**. Then add the following to your **module.json** file:
+
+    "seeder": "App\\Modules\\Content\\Seeds\\DatabaseSeeder"
+
+This setting should contain the namespace path to your seeder class. Now simply run:
+
+    php artisan modules:seed
+
+To seed all your modules. Or you can do it for a specific module:
+
+    php artisan modules::seed content
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
