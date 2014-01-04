@@ -10,19 +10,19 @@ use Symfony\Component\Console\Input\InputArgument;
 * Modules console commands
 * @author Boris Strahija <bstrahija@gmail.com>
 */
-class ModulesMigrateCommand extends AbstractCommand {
+class ModulesSeedCommand extends AbstractCommand {
 
 	/**
 	 * Name of the command
 	 * @var string
 	 */
-	protected $name = 'modules:migrate';
+	protected $name = 'modules:seed';
 
 	/**
 	 * Command description
 	 * @var string
 	 */
-	protected $description = 'Run migrations for modules.';
+	protected $description = 'Seed the database from modules.';
 
 	/**
 	 * Execute the console command.
@@ -30,7 +30,7 @@ class ModulesMigrateCommand extends AbstractCommand {
 	 */
 	public function fire()
 	{
-		$this->info('Migrating modules');
+		$this->info('Seeding database from modules');
 
 		// Get all modules or 1 specific
 		if ($moduleName = $this->input->getArgument('module')) $modules = array(app('modules')->module($moduleName));
@@ -40,24 +40,14 @@ class ModulesMigrateCommand extends AbstractCommand {
 		{
 			if ($module)
 			{
-				if ($this->app['files']->exists($module->path('migrations')))
+				if ($module->def('seeder'))
 				{
-					// Prepare params
-					$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/migrations";
-
-					// Run command
-					$this->call('migrate', array('--path' => $path));
-
-					// Run seeder if needed
-					if ($this->input->getOption('seed') and $module->def('seeder'))
-					{
-						$module->seed();
-						$this->info("Seeded '" . $module->name() . "' module.");
-					}
+					$module->seed();
+					$this->info("Seeded '" . $module->name() . "' module.");
 				}
 				else
 				{
-					$this->line("Module <info>'" . $module->name() . "'</info> has no migrations.");
+					$this->line("Module <info>'" . $module->name() . "'</info> has no seeds.");
 				}
 			}
 			else
@@ -74,18 +64,7 @@ class ModulesMigrateCommand extends AbstractCommand {
 	protected function getArguments()
 	{
 		return array(
-			array('module', InputArgument::OPTIONAL, 'The name of module being migrated.'),
-		);
-	}
-
-	/**
-	 * Get the console command options.
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array(
-			array('seed', null, InputOption::VALUE_NONE, 'Indicates if the module should seed the database.'),
+			array('module', InputArgument::OPTIONAL, 'The name of module being seeded.'),
 		);
 	}
 
