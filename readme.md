@@ -112,8 +112,10 @@ So you have the choice to either add your custom files to the global configurati
 
 A new addition is registering service providers for each module. Just add a line to your **module.json** file that looks something like this:
 
-    "provider": "App\\Modules\\Content\\ServiceProvider"
-
+    "provider": [
+        "App\\Modules\\Content\\FirstServiceProvider",
+        "App\\Modules\\Content\\SecondServiceProvider"
+    ]
 These service provider classes work exactly like any other service provider added to your **app/config/app.php** configuration, so setup these classes by extending the **\Illuminate\Support\ServiceProvider** class and adding the appropriate methods.
 
 Keep in mind that you may have to run **composer dump** so you want get error on missing classes.
