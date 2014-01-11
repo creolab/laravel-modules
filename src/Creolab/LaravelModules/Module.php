@@ -154,9 +154,14 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function registerProvider()
 	{
-		if ($provider = $this->def('provider'))
+		if ($providers = $this->def('provider'))
 		{
-			$this->app->register($instance = new $provider($this->app));
+			// Register every provider
+			foreach ($providers as $provider)
+			{
+				$this->app->register($instance = new $provider($this->app));
+			}
+
 		}
 	}
 
