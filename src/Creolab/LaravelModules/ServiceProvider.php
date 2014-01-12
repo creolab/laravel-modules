@@ -76,6 +76,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 			return new Commands\ModulesMigrateCommand($app);
 		});
 
+		// Add seed command
+		$this->app['modules.seed'] = $this->app->share(function($app)
+		{
+			return new Commands\ModulesSeedCommand($app);
+		});
+
 		// Add create command
 		$this->app['modules.create'] = $this->app->share(function($app)
 		{
@@ -88,8 +94,23 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 			return new Commands\ModulesGenerateCommand($app);
 		});
 
+		// Add publish command
+		$this->app['modules.import'] = $this->app->share(function($app)
+		{
+			return new Commands\ModulesImportCommand($app);
+		});
+
 		// Now register all the commands
-		$this->commands(array('modules.list', 'modules.scan', 'modules.publish', 'modules.migrate', 'modules.create', 'modules.generate'));
+		$this->commands(array(
+			'modules.list',
+			'modules.scan',
+			'modules.publish',
+			'modules.migrate',
+			'modules.seed',
+			'modules.create',
+			'modules.generate',
+			'modules.import'
+		));
 	}
 
 	/**
