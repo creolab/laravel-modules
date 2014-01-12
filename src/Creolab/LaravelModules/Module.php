@@ -154,9 +154,33 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function registerProvider()
 	{
-		if ($provider = $this->def('provider'))
+
+
+		if ($providers = $this->def('provider'))
 		{
-			$this->app->register($instance = new $provider($this->app));
+			// Register every provider
+			foreach ($providers as $provider)
+			{
+				$this->app->register($instance = new $provider($this->app));
+			}
+
+		}
+
+
+	}
+
+	/**
+	 * Run the seeder if it exists
+	 * @return void
+	 */
+	public function seed()
+	{
+		$class = $this->def('seeder');
+
+		if (class_exists($class))
+		{
+			$seeder = new $class;
+			$seeder->run();
 		}
 	}
 
