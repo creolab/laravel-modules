@@ -1,6 +1,7 @@
 <?php namespace Creolab\LaravelModules;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Str;
 
 /**
  * Module finder
@@ -108,7 +109,7 @@ class Finder {
 						// Check if dir contains a module definition file
 						if ($this->app['files']->exists($directory . '/module.json'))
 						{
-							$name                 = pathinfo($directory, PATHINFO_BASENAME);
+							$name                 = Str::slug(pathinfo($directory, PATHINFO_BASENAME));
 							$this->modules[$name] = new Module($name, $directory, null, $this->app);
 						}
 					}
@@ -140,7 +141,8 @@ class Finder {
 				elseif (is_array($module))  $name = $key;
 
 				// The path
-				$path = base_path($this->app['config']->get('modules::path') . '/' . $name);
+				$dir = Str::studly($name);
+				$path = base_path($this->app['config']->get('modules::path') . '/' . $dir);
 
 				// Then the definition
 				$definition = (is_array($module)) ? $module : array();
