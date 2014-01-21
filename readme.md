@@ -116,6 +116,13 @@ A new addition is registering service providers for each module. Just add a line
 
 These service provider classes work exactly like any other service provider added to your **app/config/app.php** configuration, so setup these classes by extending the **\Illuminate\Support\ServiceProvider** class and adding the appropriate methods.
 
+You can also register multiple providers for every module by simply providing an array:
+
+    "provider": [
+        "App\\Modules\\Content\\ServiceProvider",
+        "App\\Modules\\Content\\AnotherServiceProvider"
+    ]
+
 Keep in mind that you may have to run **composer dump** so you want get error on missing classes.
 
 ## Modules Manifest
