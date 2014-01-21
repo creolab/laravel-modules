@@ -129,7 +129,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			$this->package('app/' . $this->name, $this->name, $this->path());
 
 			// Register service provider
-			$this->registerProvider();
+			$this->registerProviders();
 
 			// Get files for inclusion
 			$moduleInclude = (array) array_get($this->definition, 'include');
@@ -152,11 +152,23 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 * Register service provider for module
 	 * @return void
 	 */
-	public function registerProvider()
+	public function registerProviders()
 	{
-		if ($provider = $this->def('provider'))
+		$providers = $this->def('provider');
+
+		if ($providers)
 		{
-			$this->app->register($instance = new $provider($this->app));
+			if (is_array($providers))
+			{
+				foreach ($providers as $provider)
+				{
+					$this->app->register($instance = new $provider($this->app));
+				}
+			}
+			else
+			{
+				$this->app->register($instance = new $providers($this->app));
+			}
 		}
 	}
 
