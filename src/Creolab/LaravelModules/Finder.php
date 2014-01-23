@@ -109,7 +109,7 @@ class Finder {
 						if ($this->app['files']->exists($directory . '/module.json'))
 						{
 							$name                 = pathinfo($directory, PATHINFO_BASENAME);
-							$this->modules[$name] = new Module($name, $directory, null, $this->app);
+							$this->modules[$name] = new Module($name, $directory, null, $this->app, $path);
 						}
 					}
 

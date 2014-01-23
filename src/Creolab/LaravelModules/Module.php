@@ -51,14 +51,21 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	protected $app;
 
 	/**
+	 * Path for module group
+	 * @var string
+	 */
+	public $group;
+
+	/**
 	 * Initialize a module
 	 * @param Application $app
 	 */
-	public function __construct($name, $path = null, $definition = null, Application $app)
+	public function __construct($name, $path = null, $definition = null, Application $app, $group = null)
 	{
-		$this->name = $name;
-		$this->app  = $app;
-		$this->path = $path;
+		$this->name  = $name;
+		$this->app   = $app;
+		$this->path  = $path;
+		$this->group = $group;
 
 		// Get definition
 		if ($path and ! $definition)
@@ -113,6 +120,9 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		// Assign order number
 		if ( ! isset($this->definition['order'])) $this->definition['order'] = $this->order = 0;
 		else                                      $this->definition['order'] = $this->order = (int) $this->definition['order'];
+
+		// Add group to definition
+		$this->definition['group'] = $this->group;
 
 		return $this->definition;
 	}

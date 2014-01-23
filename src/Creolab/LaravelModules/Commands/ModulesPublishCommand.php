@@ -42,12 +42,28 @@ class ModulesPublishCommand extends AbstractCommand {
 			{
 				if ($this->app['files']->exists($module->path('assets')))
 				{
+					// Group path
+					$groupPath = $module->def('group') ? str_replace('/', '_', $module->def('group')) : null;
+
 					// Prepare params
 					$path = ltrim(str_replace(app()->make('path.base'), '', $module->path()), "/") . "/assets";
-					$name = 'module/' . $module->name();
 
-					// Run command
-					$this->call('asset:publish', array('package' => $name, '--path' => $path));
+					// Get destination path
+					if (is_array($this->app['config']->get('modules::path')))
+					{
+						$destination = app()->make('path.public') . '/packages/module/' . $groupPath . '/' . $module->name() . '/assets';
+					}
+					else
+					{
+						$destination = app()->make('path.public') . '/packages/module/' . $module->name() . '/assets';
+					}
+
+					// Try to copy
+					$success = $this->app['files']->copyDirectory($path, $destination);
+
+					// Result
+					if ( ! $success) $this->line("Unable to publish assets for module '" . $module->name() . "'");
+					else             $this->info("Published assets for module '" . $module->name() . "'");
 				}
 				else
 				{
