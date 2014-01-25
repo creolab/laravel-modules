@@ -136,7 +136,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		if ($this->enabled)
 		{
 			// Register module as a package
-			$this->package('app/' . $this->name, $this->name, $this->path());
+			$this->package('modules/' . $this->name, $this->name, $this->path());
 
 			// Register service provider
 			$this->registerProviders();
