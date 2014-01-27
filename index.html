@@ -181,6 +181,14 @@ You just need to change the <strong>"mode"</strong> parameter from <strong>"auto
 
 <p>These service provider classes work exactly like any other service provider added to your <strong>app/config/app.php</strong> configuration, so setup these classes by extending the <strong>\Illuminate\Support\ServiceProvider</strong> class and adding the appropriate methods.</p>
 
+<p>You can also register multiple providers for every module by simply providing an array:</p>
+
+<pre><code>"provider": [
+    "App\\Modules\\Content\\ServiceProvider",
+    "App\\Modules\\Content\\AnotherServiceProvider"
+]
+</code></pre>
+
 <p>Keep in mind that you may have to run <strong>composer dump</strong> so you want get error on missing classes.</p>
 
 <h2>
@@ -222,6 +230,29 @@ You can also publish assets for individual modules by providing the module name:
 <p>Or to run migrations for a specific module:</p>
 
 <pre><code>php artisan modules:migrate auth
+</code></pre>
+
+<p>You can also seed the database form the module if your <strong>module.json</strong> contains a seeder setting. Just pass the <strong>--seed</strong> option to the command:</p>
+
+<pre><code>php artisan modules:migrate --seed
+</code></pre>
+
+<h1>
+<a name="seeding" class="anchor" href="#seeding"><span class="octicon octicon-link"></span></a>Seeding</h1>
+
+<p>The modules can also have seeders. Just create the class like you would create a normal seeder, place it somewhere inside your module, and be sure to run <strong>composer dump</strong>. Then add the following to your <strong>module.json</strong> file:</p>
+
+<pre><code>"seeder": "App\\Modules\\Content\\Seeds\\DatabaseSeeder"
+</code></pre>
+
+<p>This setting should contain the namespace path to your seeder class. Now simply run:</p>
+
+<pre><code>php artisan modules:seed
+</code></pre>
+
+<p>To seed all your modules. Or you can do it for a specific module:</p>
+
+<pre><code>php artisan modules::seed content
 </code></pre>
 
 <p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png" alt="Bitdeli Badge"></a></p>
