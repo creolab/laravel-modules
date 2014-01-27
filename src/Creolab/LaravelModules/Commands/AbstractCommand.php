@@ -66,6 +66,23 @@ abstract class AbstractCommand extends Command {
 		return array_filter($results);
 	}
 
+
+    /**
+     * Return a given module
+     *
+     * @param $module_name
+     * @return mixed
+     */
+    public function getModule($module_name)
+    {
+        foreach ($this->getModules() as $module) {
+            if ($module['name'] == $module_name) {
+                return $module;
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * Display a module info table in the console
 	 * @param  array $modules
