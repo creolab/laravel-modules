@@ -16,7 +16,7 @@ Also you need to add your modules directory to the composer autoloader:
         ]
     }
 
-This also means you need to run **"composer dump"** every time you add a new class to your module.
+This also means you need to run **"composer dump-autoload"** every time you add a new class to your module.
 
 By default you can add a **"modules"** directory in your **"app"** directory. So as an example this is a structure for one of my projects:
 
@@ -50,7 +50,7 @@ If you want to have your modules in more that 1 directories you need to change t
 
 And don't forget to add those directories to your autoload list inside the composer.json file.
 
-One of the available option is the order in which the modules are loaded. This can be done simply by adding the following to your modules.json file:
+One of the available option is the order in which the modules are loaded. This can be done simply by adding the following to your module.json file:
 
     "order": 5
 
@@ -75,7 +75,7 @@ This command scans the modules exactly like in the **"auto"** mode, but caches t
 
 # Optimization
 
-By default the package scans the **"modules"** directory for **"modules.json"** files. This is not the best solution way to discover modules, and I do plan to implement some kind of a caching to the Finder class.
+By default the package scans the **"modules"** directory for **"module.json"** files. This is not the best solution way to discover modules, and I do plan to implement some kind of a caching to the Finder class.
 To optimize the modules Finder even more you can publish the package configuration, and add the modules and definitions directly inside the configuration file by running:
 
     php artisan config:publish creolab/laravel-modules
@@ -85,9 +85,11 @@ You just need to change the **"mode"** parameter from **"auto"** to **"manual"**
 
 You can also add multiple module paths as an array, but do note that if a module has the same name, there will be problems.
 
+If you want you can change the file name of the module from **module.json** in what you prefer ( like **addon.json**, **plugin.json**, ... ).
+
 ## Including files
 
-You can also specify which files in the module will be automatically included. Simply add a list of files inside your **modules.json** config:
+You can also specify which files in the module will be automatically included. Simply add a list of files inside your **module.json** config:
 
     {
         "include": [
@@ -123,7 +125,7 @@ You can also register multiple providers for every module by simply providing an
         "App\\Modules\\Content\\AnotherServiceProvider"
     ]
 
-Keep in mind that you may have to run **composer dump** so you want get error on missing classes.
+Keep in mind that you may have to run **composer dump-autoload** so you want get error on missing classes.
 
 ## Modules Manifest
 
@@ -163,7 +165,7 @@ You can also seed the database form the module if your **module.json** contains 
 
 # Seeding
 
-The modules can also have seeders. Just create the class like you would create a normal seeder, place it somewhere inside your module, and be sure to run **composer dump**. Then add the following to your **module.json** file:
+The modules can also have seeders. Just create the class like you would create a normal seeder, place it somewhere inside your module, and be sure to run **composer dump-autoload**. Then add the following to your **module.json** file:
 
     "seeder": "App\\Modules\\Content\\Seeds\\DatabaseSeeder"
 
