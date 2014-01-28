@@ -52,7 +52,7 @@ class ModulesCreateCommand extends AbstractCommand {
 
 			// Create definition and write to file
 			$definition = json_encode(array('enabled' => true));
-			$this->app['files']->put($modulePath . '/module.json', $definition);
+			$this->app['files']->put($modulePath . '/' . $this->app['config']->get('modules::filename'), $definition);
 
 			// Create routes and write to file
 			$routes = '<?php' . PHP_EOL;

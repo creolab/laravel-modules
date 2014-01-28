@@ -106,7 +106,7 @@ class Finder {
 					foreach ($directories as $directory)
 					{
 						// Check if dir contains a module definition file
-						if ($this->app['files']->exists($directory . '/module.json'))
+						if ($this->app['files']->exists($directory . '/' . $this->app['config']->get('modules::filename')))
 						{
 							$name                 = pathinfo($directory, PATHINFO_BASENAME);
 							$this->modules[$name] = new Module($name, $directory, null, $this->app, $path);
