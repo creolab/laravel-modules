@@ -211,7 +211,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 * @param  string $path
 	 * @return string
 	 */
-	function path($path = null)
+	public function path($path = null)
 	{
 		if ($path) return $this->path . '/' . ltrim($path, '/');
 		else       return $this->path;
