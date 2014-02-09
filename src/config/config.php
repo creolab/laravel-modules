@@ -9,6 +9,12 @@ return array(
 	'path' => 'app/modules',
 
 	/**
+	 * The name of the modules file
+	 * Fox example: module.json or addon.json, ...
+	 */
+	'filename' => 'module.json',
+
+	/**
 	 * If set to 'auto', the modules path will be scanned for modules
 	 */
 	'mode' => 'auto',

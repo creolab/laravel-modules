@@ -21,6 +21,12 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	protected $path;
 
 	/**
+	 * File name of the module
+	 * @var string
+	 */
+	protected $filename;
+
+	/**
 	 * Path to module definition JSON file
 	 * @var string
 	 */
@@ -67,10 +73,13 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		$this->path  = $path;
 		$this->group = $group;
 
+		// Module file name
+		$this->filename = $app['config']->get('modules::filename');
+
 		// Get definition
 		if ($path and ! $definition)
 		{
-			$this->definitionPath = $path . '/module.json';
+			$this->definitionPath = $path . '/'. $this->filename;
 		}
 		elseif (is_array($definition))
 		{
@@ -215,6 +224,15 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	{
 		if ($path) return $this->path . '/' . ltrim($path, '/');
 		else       return $this->path;
+	}
+
+	/**
+	 * Return file name of module
+	 * @return string
+	 */
+	public function filename()
+	{
+		return $this->filename;
 	}
 
 	/**
