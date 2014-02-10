@@ -59,7 +59,7 @@ class Manifest {
 		// Cache it
 		try
 		{
-			$this->app['files']->put($this->path, json_encode($this->data));
+			$this->app['files']->put($this->path, $this->app['modules']->prettyJsonEncode($this->data));
 		}
 		catch(\Exception $e)
 		{

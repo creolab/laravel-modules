@@ -51,7 +51,7 @@ class ModulesCreateCommand extends AbstractCommand {
 			}
 
 			// Create definition and write to file
-			$definition = json_encode(array('enabled' => true));
+			$definition = $this->app['modules']->prettyJsonEncode(array('enabled' => true));
 			$this->app['files']->put($modulePath . '/module.json', $definition);
 
 			// Create routes and write to file
