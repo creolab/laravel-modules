@@ -12,11 +12,11 @@
     "require": {
         "php": ">=5.3.0",
         "laravel/framework": "~4",
-        "way/generators": "dev-master"
+        "way/generators": "~1"
     },
     "autoload": {
-        "psr-0": {
-            "Creolab\\LaravelModules": "src/"
+        "psr-4": {
+            "Creolab\\LaravelModules\\": "src/"
         }
     },
     "minimum-stability": "dev"
