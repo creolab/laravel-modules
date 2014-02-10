@@ -228,4 +228,14 @@ class Finder {
 		}
 	}
 
+	/**
+	 * Prettify a JSON Encode ( PHP 5.4+ )
+	 * @param  mixed $values
+	 * @return string
+	 */
+	public function prettyJsonEncode($values)
+	{
+		return version_compare(PHP_VERSION, '5.4.0', '>=') ? json_encode($values, JSON_PRETTY_PRINT) : json_encode($values);
+	}
+
 }
