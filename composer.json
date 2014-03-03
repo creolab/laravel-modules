@@ -16,6 +16,9 @@
     "require-dev": {
         "way/generators": "~2"
     },
+    "suggest": {
+        "way/generators": "Required for modules:generate functionality."
+    },
     "autoload": {
         "psr-4": {
             "Creolab\\LaravelModules\\": "src/"
