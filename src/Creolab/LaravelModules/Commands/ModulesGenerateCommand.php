@@ -40,28 +40,28 @@ class ModulesGenerateCommand extends AbstractCommand {
 		if ($type == 'controller')
 		{
 			$dirPath = $modulePath . '/' . $moduleName . '/controllers';
-			$this->call('generate:controller', array('name' => $resource, '--path' => $dirPath));
+			$this->call('generate:controller', array('controllerName' => $resource, '--path' => $dirPath));
 		}
 
-		// Generate a model
+		// Generate a models
 		if ($type == 'model')
 		{
 			$dirPath = $modulePath . '/' . $moduleName . '/models';
-			$this->call('generate:model', array('name' => $resource, '--path' => $dirPath));
+			$this->call('generate:model', array('modelName' => $resource, '--path' => $dirPath));
 		}
 
 		// Generate a migration
 		if ($type == 'migration')
 		{
 			$dirPath = $modulePath . '/' . $moduleName . '/migrations';
-			$this->call('generate:migration', array('name' => $resource, '--path' => $dirPath));
+			$this->call('generate:migration', array('migrationName' => $resource, '--path' => $dirPath));
 		}
 
-		// Generate a view
+		// Generate a views
 		if ($type == 'view')
 		{
 			$dirPath = $modulePath . '/' . $moduleName . '/views';
-			$this->call('generate:view', array('name' => $resource, '--path' => $dirPath));
+			$this->call('generate:view', array('viewName' => $resource, '--path' => $dirPath));
 		}
 	}
 
