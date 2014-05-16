@@ -30,6 +30,12 @@ class ModulesMigrateCommand extends AbstractCommand {
 	 */
 	public function fire()
 	{
+
+        if ($this->input->getOption('refresh'))
+        {
+            $this->call('migrate:refresh');
+        }
+
 		$this->info('Migrating modules');
 
 		// Get all modules or 1 specific
@@ -86,6 +92,7 @@ class ModulesMigrateCommand extends AbstractCommand {
 	{
 		return array(
 			array('seed', null, InputOption::VALUE_NONE, 'Indicates if the module should seed the database.'),
+			array('refresh', null, InputOption::VALUE_NONE, 'Indicates if the module should reset the database.'),
 		);
 	}
 
