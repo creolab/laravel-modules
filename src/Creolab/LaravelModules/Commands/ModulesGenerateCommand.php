@@ -31,36 +31,36 @@ class ModulesGenerateCommand extends AbstractCommand {
 	public function fire()
 	{
 		// Name of new module
-		$module     = $this->getModule($this->input->getArgument('module'));
-		$modulePath = base_path(ltrim($module['path'], '/'));
+		$moduleName = $this->input->getArgument('module');
+		$modulePath = $this->app['config']->get('modules::path');
 		$type       = $this->input->getArgument('type');
 		$resource   = $this->input->getArgument('resource');
 
 		// Generate a controller
 		if ($type == 'controller')
 		{
-			$dirPath = $modulePath . '/controllers';
+			$dirPath = $modulePath . '/' . $moduleName . '/controllers';
 			$this->call('generate:controller', array('controllerName' => $resource, '--path' => $dirPath));
 		}
 
-		// Generate a model
+		// Generate a models
 		if ($type == 'model')
 		{
-			$dirPath = $modulePath . '/models';
+			$dirPath = $modulePath . '/' . $moduleName . '/models';
 			$this->call('generate:model', array('modelName' => $resource, '--path' => $dirPath));
 		}
 
 		// Generate a migration
 		if ($type == 'migration')
 		{
-			$dirPath = $modulePath . '/migrations';
+			$dirPath = $modulePath . '/' . $moduleName . '/migrations';
 			$this->call('generate:migration', array('migrationName' => $resource, '--path' => $dirPath));
 		}
 
-		// Generate a view
+		// Generate a views
 		if ($type == 'view')
 		{
-			$dirPath = $modulePath . '/views';
+			$dirPath = $modulePath . '/' . $moduleName . '/views';
 			$this->call('generate:view', array('viewName' => $resource, '--path' => $dirPath));
 		}
 	}
