@@ -51,21 +51,14 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	protected $app;
 
 	/**
-	 * Path for module group
-	 * @var string
-	 */
-	public $group;
-
-	/**
 	 * Initialize a module
 	 * @param Application $app
 	 */
-	public function __construct($name, $path = null, $definition = null, Application $app, $group = null)
+	public function __construct($name, $path = null, $definition = null, Application $app)
 	{
-		$this->name  = $name;
-		$this->app   = $app;
-		$this->path  = $path;
-		$this->group = $group;
+		$this->name = $name;
+		$this->app  = $app;
+		$this->path = $path;
 
 		// Get definition
 		if ($path and ! $definition)
@@ -121,9 +114,6 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		if ( ! isset($this->definition['order'])) $this->definition['order'] = $this->order = 0;
 		else                                      $this->definition['order'] = $this->order = (int) $this->definition['order'];
 
-		// Add group to definition
-		$this->definition['group'] = $this->group;
-
 		return $this->definition;
 	}
 
@@ -136,10 +126,10 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		if ($this->enabled)
 		{
 			// Register module as a package
-			$this->package('modules/' . $this->name, $this->name, $this->path());
+			$this->package('app/' . $this->name, $this->name, $this->path());
 
 			// Register service provider
-			$this->registerProviders();
+			$this->registerProvider();
 
 			// Get files for inclusion
 			$moduleInclude = (array) array_get($this->definition, 'include');
@@ -150,7 +140,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			foreach ($include as $file)
 			{
 				$path = $this->path($file);
-				if ($this->app['files']->exists($path)) require_once $path;
+				if ($this->app['files']->exists($path)) require $path;
 			}
 
 			// Log it
@@ -162,23 +152,11 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 * Register service provider for module
 	 * @return void
 	 */
-	public function registerProviders()
+	public function registerProvider()
 	{
-		$providers = $this->def('provider');
-
-		if ($providers)
+		if ($provider = $this->def('provider'))
 		{
-			if (is_array($providers))
-			{
-				foreach ($providers as $provider)
-				{
-					$this->app->register($instance = new $provider($this->app));
-				}
-			}
-			else
-			{
-				$this->app->register($instance = new $providers($this->app));
-			}
+			$this->app->register($instance = new $provider($this->app));
 		}
 	}
 
@@ -211,7 +189,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 * @param  string $path
 	 * @return string
 	 */
-	public function path($path = null)
+	function path($path = null)
 	{
 		if ($path) return $this->path . '/' . ltrim($path, '/');
 		else       return $this->path;
