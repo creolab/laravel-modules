@@ -150,7 +150,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			foreach ($include as $file)
 			{
 				$path = $this->path($file);
-				if ($this->app['files']->exists($path)) require_once $path;
+				if ($this->app['files']->exists($path)) require $path;
 			}
 
 			// Log it
