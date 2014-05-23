@@ -14,18 +14,21 @@ abstract class AbstractCommand extends Command {
 
 	/**
 	 * List of all available modules
+	 *
 	 * @var array
 	 */
 	protected $modules;
 
 	/**
 	 * IoC
+	 *
 	 * @var Illuminate\Foundation\Application
 	 */
 	protected $app;
 
 	/**
 	 * DI
+	 *
 	 * @param Application $app
 	 */
 	public function __construct(Application $app)
@@ -36,6 +39,7 @@ abstract class AbstractCommand extends Command {
 
 	/**
 	 * Get the console command options.
+	 *
 	 * @return array
 	 */
 	protected function getOptions()
@@ -45,6 +49,7 @@ abstract class AbstractCommand extends Command {
 
 	/**
 	 * Reformats the modules list for table display
+	 *
 	 * @return array
 	 */
 	public function getModules()
@@ -85,6 +90,7 @@ abstract class AbstractCommand extends Command {
 
 	/**
 	 * Display a module info table in the console
+	 *
 	 * @param  array $modules
 	 * @return void
 	 */
@@ -102,6 +108,7 @@ abstract class AbstractCommand extends Command {
 
 	/**
 	 * Dump autoload classes
+	 *
 	 * @return void
 	 */
 	public function dumpAutoload()
