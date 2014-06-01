@@ -63,6 +63,13 @@ class ModulesGenerateCommand extends AbstractCommand {
 			$dirPath = $modulePath . '/views';
 			$this->call('generate:view', array('viewName' => $resource, '--path' => $dirPath));
 		}
+
+		// Generate a seed
+		if ($type == 'seed')
+		{
+			$dirPath = $modulePath . '/seeds';
+			$this->call('generate:seed', array('tableName' => $resource, '--path' => $dirPath));
+		}
 	}
 
 	/**

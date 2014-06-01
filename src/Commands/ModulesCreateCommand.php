@@ -66,6 +66,7 @@ class ModulesCreateCommand extends AbstractCommand {
 			$this->app['files']->makeDirectory($modulePath . '/models', 0755);
 			$this->app['files']->makeDirectory($modulePath . '/migrations', 0755);
 			$this->app['files']->makeDirectory($modulePath . '/views', 0755);
+			$this->app['files']->makeDirectory($modulePath . '/seeds', 0755);
 
 			// Autoload classes
 			$this->dumpAutoload();
