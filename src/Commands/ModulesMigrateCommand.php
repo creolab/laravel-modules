@@ -121,7 +121,14 @@ class ModulesMigrateCommand extends AbstractCommand {
 
 		//call migrate command on temporary path
 		$this->info("Migrating...");
-		$this->call('migrate', array('--path' => ltrim(str_replace(base_path(), '', $_tmpPath), '/')));
+
+		$opts = array('--path' => ltrim(str_replace(base_path(), '', $_tmpPath), '/');
+
+		if($this->input->getOption('force')) {
+		 	$opts['--force'] = true
+ 		}
+
+		$this->call('migrate', $opts));
 
 		// Delete all temp migration files
 		$this->info("Cleaning temporary files");
@@ -152,6 +159,10 @@ class ModulesMigrateCommand extends AbstractCommand {
 	{
 		return array(
 			array('seed', null, InputOption::VALUE_NONE, 'Indicates if the module should seed the database.',),
+		);
+
+		return array(
+			array('force', '-f', InputOption::VALUE_NONE, 'Force the operation to run when in production.')
 		);
 	}
 
