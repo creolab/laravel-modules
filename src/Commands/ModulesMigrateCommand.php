@@ -125,7 +125,7 @@ class ModulesMigrateCommand extends AbstractCommand {
 		$opts = array('--path' => ltrim(str_replace(base_path(), '', $_tmpPath), '/'));
 
 		if($this->input->getOption('force')) {
-		 	$opts['--force'] = true
+		 	$opts['--force'] = true;
  		}
 
 		$this->call('migrate', $opts);
