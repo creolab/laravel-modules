@@ -136,6 +136,7 @@ class ModulesMigrateCommand extends AbstractCommand {
 
 		// Done
 		$this->info("DONE!");
+		
 	}
 
 	/**
