@@ -122,13 +122,13 @@ class ModulesMigrateCommand extends AbstractCommand {
 		//call migrate command on temporary path
 		$this->info("Migrating...");
 
-		$opts = array('--path' => ltrim(str_replace(base_path(), '', $_tmpPath), '/');
+		$opts = array('--path' => ltrim(str_replace(base_path(), '', $_tmpPath), '/'));
 
 		if($this->input->getOption('force')) {
 		 	$opts['--force'] = true
  		}
 
-		$this->call('migrate', $opts));
+		$this->call('migrate', $opts);
 
 		// Delete all temp migration files
 		$this->info("Cleaning temporary files");
