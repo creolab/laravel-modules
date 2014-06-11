@@ -136,7 +136,7 @@ class ModulesMigrateCommand extends AbstractCommand {
 
 		// Done
 		$this->info("DONE!");
-		
+
 	}
 
 	/**
@@ -159,10 +159,7 @@ class ModulesMigrateCommand extends AbstractCommand {
 	protected function getOptions()
 	{
 		return array(
-			array('seed', null, InputOption::VALUE_NONE, 'Indicates if the module should seed the database.',),
-		);
-
-		return array(
+			array('seed', null, InputOption::VALUE_NONE, 'Indicates if the module should seed the database.'),
 			array('force', '-f', InputOption::VALUE_NONE, 'Force the operation to run when in production.')
 		);
 	}
