@@ -175,4 +175,18 @@ To seed all your modules. Or you can do it for a specific module:
 
     php artisan modules::seed content
 
+# Commands
+
+You can add module specific commands. This is a sample artisan command file creation :
+
+    php artisan command:make <MyModuleCommandName> --path=app/modules/<MyModule>/commands --namespace=App\Modules\<MyModule>\Commands --command=modules.mymodule:mycommand
+
+Then in the **module.json** add (you can also add an array if you have multiple commands) :
+
+    "command": "App\\Modules\\<MyModule>\\Commands\\MyModuleCommandName"
+
+After a dump-autoload you can now execute **modules.mymodule:mycommand** from command line :
+
+    php artisan modules.mymodule:mycommand
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
