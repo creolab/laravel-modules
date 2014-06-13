@@ -140,7 +140,8 @@ class Finder {
 				elseif (is_array($module))  $name = $key;
 
 				// The path
-				$path = base_path($this->app['config']->get('modules::path') . '/' . $name);
+				if(isset($module['path'])) $path = $module['path'] . '/' . $name;
+				else $path = base_path($this->app['config']->get('modules::path') . '/' . $name);
 
 				// Then the definition
 				$definition = (is_array($module)) ? $module : array();
