@@ -152,7 +152,17 @@ class Module extends \Illuminate\Support\ServiceProvider {
 				$path = $this->path($file);
 				if ($this->app['files']->exists($path)) require $path;
 			}
-
+			
+			// Register command(s) into artisan
+			if(!is_null($this->def('command'))) {
+				$commands = $this->def('command');
+				
+				if(!is_array($commands))
+					$commands = array($commands);
+				
+				$this->commands($commands);
+			}
+			
 			// Log it
 			$this->app['modules']->logDebug('Module "' . $this->name . '" has been registered.');
 		}
