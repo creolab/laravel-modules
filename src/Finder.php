@@ -112,11 +112,11 @@ class Finder {
 							$this->modules[$name] = new Module($name, $directory, null, $this->app, $path);
 						}
 					}
-
-					// Save the manifest file
-					$this->saveManifest();
 				}
 			}
+
+			// Save the manifest file
+			$this->saveManifest();
 		}
 
 		return $this->modules;
@@ -128,29 +128,61 @@ class Finder {
 	 */
 	public function manual($config = null)
 	{
-		if ( ! $config) $modules = $this->app['config']->get('modules::modules');
-		else            $modules = $config;
-
-		if ($modules)
+		if (! is_null($config))
 		{
-			foreach ($modules as $key => $module)
+			$this->createInstances($config);
+		}
+
+		else
+		{
+			$moduleGroups = $this->app['config']->get('modules::modules');
+
+			if ($moduleGroups)
 			{
-				// Get name first
-				if     (is_string($module)) $name = $module;
-				elseif (is_array($module))  $name = $key;
-
-				// The path
-				$path = base_path($this->app['config']->get('modules::path') . '/' . $name);
-
-				// Then the definition
-				$definition = (is_array($module)) ? $module : array();
-
-				// Create instance
-				$this->modules[$name] = new Module($name, $path, $definition, $this->app);
+				foreach ($moduleGroups as $group => $modules)
+				{
+					$this->createInstances($modules, $group);
+				}
 			}
 		}
 
 		return $this->modules;
+	}
+
+	/**
+	 * Create module instances
+	 * @param array $modules
+	 * @param string|null $groupPath
+	 * @return array
+	 */
+	public function createInstances($modules, $groupPath = null)
+	{
+		foreach ($modules as $key => $module)
+		{
+			// Get name and defintion
+			if (is_string($module))
+			{
+				$name = $module;	
+				
+				$definition = array();
+			}
+
+			elseif (is_array($module))
+			{
+				$name = $key;
+
+				$definition = $module;
+			}  
+
+			// Get group. Manifest mode has group defined on the module.
+			$group = (! is_null($groupPath)) ? $groupPath : $module['group'];
+
+			// The path
+			$path = base_path($group . '/' . $name);
+
+			// Create instance
+			$this->modules[$name] = new Module($name, $path, $definition, $this->app, $group);
+		}
 	}
 
 	/**
