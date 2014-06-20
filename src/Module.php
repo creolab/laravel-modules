@@ -238,7 +238,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 
 	/**
 	 * Get definition value
-	 * @param  stirng $key
+	 * @param  string $key
 	 * @return mixed
 	 */
 	public function def($key = null)
