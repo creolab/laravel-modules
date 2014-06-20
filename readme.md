@@ -203,4 +203,12 @@ After a dump-autoload you can now execute **modules.mymodule:mycommand** from co
 
     php artisan modules.mymodule:mycommand
 
+# Aliases
+
+If you declare Facades into your modules you will like to create Aliases for your module, you can simply reference your alias in the `module.json` :
+
+    "alias": {
+    	"<MyAlias>" "App\\Modules\\<MyModule>\\Facades\\<MyFacade>"
+    }
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
