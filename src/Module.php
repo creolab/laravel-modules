@@ -153,6 +153,18 @@ class Module extends \Illuminate\Support\ServiceProvider {
 				if ($this->app['files']->exists($path)) require $path;
 			}
 			
+			// Register alias(es) into artisan
+			if(!is_null($this->def('alias'))) {
+				$aliases = $this->def('alias');
+
+				if(!is_array($aliases))
+					$aliases = array($aliases);
+
+				foreach($aliases as $alias => $facade) {
+					AliasLoader::getInstance()->alias($alias, $facade);
+				}
+			}
+			
 			// Register command(s) into artisan
 			if(!is_null($this->def('command'))) {
 				$commands = $this->def('command');
