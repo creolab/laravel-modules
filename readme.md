@@ -83,6 +83,20 @@ To optimize the modules Finder even more you can publish the package configurati
 And the editing the file **"app/config/packages/creolab/laravel-modules/config.php"**.
 You just need to change the **"mode"** parameter from **"auto"** to **"manual"**, and list your modules under the **"modules"** key. An example of that is already provided inside the configuration.
 
+**Note for Manual mode with multiple paths** : Laravel-Modules could not determine witch path to use. So please specify the folder containing the module you want to load. Like this example :
+
+    'path' => [
+		'app/modules1',
+		'app/modules2'
+	],
+    
+    'modules' => [
+		'mymodule' => array(
+		    'enabled' => true,
+		    'path' => 'app/modules2'
+		)
+	],
+	
 You can also add multiple module paths as an array, but do note that if a module has the same name, there will be problems.
 
 ## Including files
@@ -174,5 +188,27 @@ This setting should contain the namespace path to your seeder class. Now simply 
 To seed all your modules. Or you can do it for a specific module:
 
     php artisan modules::seed content
+
+# Commands
+
+You can add module specific commands. This is a sample artisan command file creation :
+
+    php artisan command:make <MyModuleCommandName> --path=app/modules/<MyModule>/commands --namespace=App\Modules\<MyModule>\Commands --command=modules.mymodule:mycommand
+
+Then in the **module.json** add (you can also add an array if you have multiple commands) :
+
+    "command": "App\\Modules\\<MyModule>\\Commands\\MyModuleCommandName"
+
+After a dump-autoload you can now execute **modules.mymodule:mycommand** from command line :
+
+    php artisan modules.mymodule:mycommand
+
+# Aliases
+
+If you declare Facades into your modules you will like to create Aliases for your module, you can simply reference your alias in the `module.json` :
+
+    "alias": {
+    	"<MyAlias>" "App\\Modules\\<MyModule>\\Facades\\<MyFacade>"
+    }
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
