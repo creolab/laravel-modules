@@ -85,16 +85,14 @@ You just need to change the **"mode"** parameter from **"auto"** to **"manual"**
 
 **Note for Manual mode with multiple paths** : Laravel-Modules could not determine witch path to use. So please specify the folder containing the module you want to load. Like this example :
 
-    'path' => [
-		'app/modules1',
-		'app/modules2'
-	],
-    
     'modules' => [
-		'mymodule' => array(
-		    'enabled' => true,
-		    'path' => 'app/modules2'
-		)
+	    'app/modules' => [
+	        'system' => ['enabled' => true],
+	    ],
+	    'another/modules/path' => [
+	        'pages' => ['enabled' => false],
+	        'seo'   => ['enabled' => true],
+	    ],
 	],
 	
 You can also add multiple module paths as an array, but do note that if a module has the same name, there will be problems.
