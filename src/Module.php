@@ -231,7 +231,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			}
 			else
 			{
-                $instance = $this->app->getRegistered($provider);
+                $instance = $this->app->getRegistered($providers);
                 if (method_exists($instance, 'bootstrap'))
                 {
                     $instance->bootstrap();
