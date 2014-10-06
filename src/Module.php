@@ -154,6 +154,20 @@ class Module extends \Illuminate\Support\ServiceProvider {
 				if ($this->app['files']->exists($path)) require $path;
 			}
 			
+			// Get paths to include with glob()
+			$globalPaths = $this->app['config']->get('modules::paths');
+			
+			// Include all paths if they exist and represent a file
+                        foreach ($globalPaths as $path)
+                        {
+                                $path = $this->path($path);
+                                $files = glob($path);
+                                foreach($files as $file)
+                                {
+                                        if (is_file($file)&&file_exists($file)) require $file;
+                                }
+                        }
+
 			// Register alias(es) into artisan
 			if(!is_null($this->def('alias'))) {
 				$aliases = $this->def('alias');
