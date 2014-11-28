@@ -185,7 +185,7 @@ This setting should contain the namespace path to your seeder class. Now simply 
 
 To seed all your modules. Or you can do it for a specific module:
 
-    php artisan modules::seed content
+    php artisan modules:seed content
 
 # Commands
 
