@@ -1,28 +1,30 @@
 {
-    "name": "creolab/laravel-modules",
-    "keywords": ["modules", "laravel"],
-    "description": "Application specific modules in Laravel 4",
-    "homepage": "http://creolab.hr",
-    "authors": [
-        {
-            "name": "Boris Strahija",
-            "email": "bstrahija@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.0",
-        "laravel/framework": "~4"
-    },
-    "require-dev": {
-        "way/generators": "~2"
-    },
-    "suggest": {
-        "way/generators": "Required for modules:generate functionality."
-    },
-    "autoload": {
-        "psr-4": {
-            "Creolab\\LaravelModules\\": "src/"
-        }
-    },
-    "minimum-stability": "dev"
+  "name": "meabed/laravel-modules",
+  "keywords": [
+    "modules",
+    "laravel"
+  ],
+  "description": "Application specific modules in Laravel 5",
+  "authors": [
+    {
+      "name": "Boris Strahija",
+      "email": "bstrahija@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "laravel/framework": "5.*.*"
+  },
+  "require-dev": {
+    "way/generators": "~2"
+  },
+  "suggest": {
+    "way/generators": "Required for modules:generate functionality."
+  },
+  "autoload": {
+    "psr-4": {
+      "Web\\LaravelModules\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
 }

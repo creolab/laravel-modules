@@ -1,4 +1,4 @@
-<?php namespace Creolab\LaravelModules;
+<?php namespace Web\LaravelModules;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Foundation\Application;
