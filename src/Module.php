@@ -178,6 +178,9 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			
 			// Log it
 			$this->app['modules']->logDebug('Module "' . $this->name . '" has been registered.');
+
+            // Allow service providers to bootstrap anything necessary after registered.
+            $this->bootstrapProviders();
 		}
 	}
 
@@ -204,6 +207,39 @@ class Module extends \Illuminate\Support\ServiceProvider {
 			}
 		}
 	}
+
+	/**
+	 * Bootstrap service provider for module
+	 * @return void
+	 */
+	public function bootstrapProviders()
+	{
+		$providers = $this->def('provider');
+
+		if ($providers)
+		{
+			if (is_array($providers))
+			{
+				foreach ($providers as $provider)
+				{
+                    $instance = $this->app->getRegistered($provider);
+                    if (method_exists($instance, 'bootstrap'))
+                    {
+                        $instance->bootstrap();
+                    }
+				}
+			}
+			else
+			{
+                $instance = $this->app->getRegistered($providers);
+                if (method_exists($instance, 'bootstrap'))
+                {
+                    $instance->bootstrap();
+                }
+			}
+		}
+	}
+
 
 	/**
 	 * Run the seeder if it exists
