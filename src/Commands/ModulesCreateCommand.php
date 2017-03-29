@@ -35,8 +35,6 @@ class ModulesCreateCommand extends AbstractCommand {
 		$this->info('Creating module "'.$moduleName.'"');
 
 		// Chech if module exists
-		$exists = app('modules')->module($moduleName);
-
 		if ( ! app('modules')->module($moduleName))
 		{
 			// Get path to modules
@@ -47,11 +45,11 @@ class ModulesCreateCommand extends AbstractCommand {
 			// Create the directory
 			if ( ! $this->app['files']->exists($modulePath))
 			{
-				$this->app['files']->makeDirectory($modulePath, 0755);
+				$this->app['files']->makeDirectory($modulePath, 0755, true);
 			}
 
 			// Create definition and write to file
-			$definition = json_encode(array('enabled' => true));
+			$definition = $this->app['modules']->prettyJsonEncode(array('enabled' => true));
 			$this->app['files']->put($modulePath . '/module.json', $definition);
 
 			// Create routes and write to file

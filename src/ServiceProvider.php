@@ -14,7 +14,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('creolab/laravel-modules', 'modules', __DIR__ . '/../../');
+		$this->package('creolab/laravel-modules', 'modules', __DIR__);
 
 		// Register commands
 		$this->bootCommands();
@@ -76,6 +76,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 			return new Commands\ModulesMigrateCommand($app);
 		});
 
+		// Add seed command
+		$this->app['modules.seed'] = $this->app->share(function($app)
+		{
+			return new Commands\ModulesSeedCommand($app);
+		});
+
 		// Add create command
 		$this->app['modules.create'] = $this->app->share(function($app)
 		{
@@ -89,7 +95,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 		});
 
 		// Now register all the commands
-		$this->commands(array('modules.list', 'modules.scan', 'modules.publish', 'modules.migrate', 'modules.create', 'modules.generate'));
+		$this->commands(array(
+			'modules.list',
+			'modules.scan',
+			'modules.publish',
+			'modules.migrate',
+			'modules.seed',
+			'modules.create',
+			'modules.generate'
+		));
 	}
 
 	/**

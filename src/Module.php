@@ -1,5 +1,6 @@
 <?php namespace Creolab\LaravelModules;
 
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Foundation\Application;
 
 /**
@@ -51,14 +52,21 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	protected $app;
 
 	/**
+	 * Path for module group
+	 * @var string
+	 */
+	public $group;
+
+	/**
 	 * Initialize a module
 	 * @param Application $app
 	 */
-	public function __construct($name, $path = null, $definition = null, Application $app)
+	public function __construct($name, $path = null, $definition = null, Application $app, $group = null)
 	{
-		$this->name = $name;
-		$this->app  = $app;
-		$this->path = $path;
+		$this->name  = $name;
+		$this->app   = $app;
+		$this->path  = $path;
+		$this->group = $group;
 
 		// Get definition
 		if ($path and ! $definition)
@@ -114,6 +122,9 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		if ( ! isset($this->definition['order'])) $this->definition['order'] = $this->order = 0;
 		else                                      $this->definition['order'] = $this->order = (int) $this->definition['order'];
 
+		// Add group to definition
+		$this->definition['group'] = $this->group;
+
 		return $this->definition;
 	}
 
@@ -126,31 +137,45 @@ class Module extends \Illuminate\Support\ServiceProvider {
 		if ($this->enabled)
 		{
 			// Register module as a package
-			$this->package('app/' . $this->name, $this->name, $this->path());
+			$this->package('modules/' . $this->name, $this->name, $this->path());
 
 			// Register service provider
-			$this->registerProvider();
+			$this->registerProviders();
 
-			// Require module helpers
-			$helpers = $this->path('helpers.php');
-			if ($this->app['files']->exists($helpers)) require $helpers;
+			// Get files for inclusion
+			$moduleInclude = (array) array_get($this->definition, 'include');
+			$globalInclude = $this->app['config']->get('modules::include');
+			$include       = array_merge($globalInclude, $moduleInclude);
 
-			// Require module filters
-			$filters = $this->path('filters.php');
-			if ($this->app['files']->exists($filters)) require $filters;
+			// Include all of them if they exist
+			foreach ($include as $file)
+			{
+				$path = $this->path($file);
+				if ($this->app['files']->exists($path)) require $path;
+			}
+			
+			// Register alias(es) into artisan
+			if(!is_null($this->def('alias'))) {
+				$aliases = $this->def('alias');
 
-			// Require module routes
-			$routes = $this->path('routes.php');
-			if ($this->app['files']->exists($routes)) require $routes;
+				if(!is_array($aliases))
+					$aliases = array($aliases);
 
-			// Require module bindings
-			$bindings = $this->path('bindings.php');
-			if ($this->app['files']->exists($bindings)) require $bindings;
-
-			// Require module observers/events
-			$observers = $this->path('observers.php');
-			if ($this->app['files']->exists($observers)) require $observers;
-
+				foreach($aliases as $alias => $facade) {
+					AliasLoader::getInstance()->alias($alias, $facade);
+				}
+			}
+			
+			// Register command(s) into artisan
+			if(!is_null($this->def('command'))) {
+				$commands = $this->def('command');
+				
+				if(!is_array($commands))
+					$commands = array($commands);
+				
+				$this->commands($commands);
+			}
+			
 			// Log it
 			$this->app['modules']->logDebug('Module "' . $this->name . '" has been registered.');
 		}
@@ -160,11 +185,38 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 * Register service provider for module
 	 * @return void
 	 */
-	public function registerProvider()
+	public function registerProviders()
 	{
-		if ($provider = $this->def('provider'))
+		$providers = $this->def('provider');
+
+		if ($providers)
 		{
-			$this->app->register($instance = new $provider($this->app));
+			if (is_array($providers))
+			{
+				foreach ($providers as $provider)
+				{
+					$this->app->register($instance = new $provider($this->app));
+				}
+			}
+			else
+			{
+				$this->app->register($instance = new $providers($this->app));
+			}
+		}
+	}
+
+	/**
+	 * Run the seeder if it exists
+	 * @return void
+	 */
+	public function seed()
+	{
+		$class = $this->def('seeder');
+
+		if (class_exists($class))
+		{
+			$seeder = new $class;
+			$seeder->run();
 		}
 	}
 
@@ -182,7 +234,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 	 * @param  string $path
 	 * @return string
 	 */
-	function path($path = null)
+	public function path($path = null)
 	{
 		if ($path) return $this->path . '/' . ltrim($path, '/');
 		else       return $this->path;
@@ -199,7 +251,7 @@ class Module extends \Illuminate\Support\ServiceProvider {
 
 	/**
 	 * Get definition value
-	 * @param  stirng $key
+	 * @param  string $key
 	 * @return mixed
 	 */
 	public function def($key = null)

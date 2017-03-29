@@ -57,7 +57,14 @@ class Manifest {
 		}
 
 		// Cache it
-		$this->app['files']->put($this->path, json_encode($this->data));
+		try
+		{
+			$this->app['files']->put($this->path, $this->app['modules']->prettyJsonEncode($this->data));
+		}
+		catch(\Exception $e)
+		{
+			$this->app['log']->error("[MODULES] Failed when saving manifest file: " . $e->getMessage());
+		}
 
 		return $this->data;
 	}
