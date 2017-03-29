@@ -1,4 +1,4 @@
-<?php namespace Creolab\LaravelModules;
+<?php namespace Web\LaravelModules;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
@@ -14,7 +14,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('creolab/laravel-modules', 'modules', __DIR__);
+		$this->package('Web/laravel-modules', 'modules', __DIR__);
 
 		// Register commands
 		$this->bootCommands();

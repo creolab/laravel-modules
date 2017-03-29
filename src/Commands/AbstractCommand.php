@@ -1,4 +1,4 @@
-<?php namespace Creolab\LaravelModules\Commands;
+<?php namespace Web\LaravelModules\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Application;
