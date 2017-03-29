@@ -219,4 +219,6 @@ If you declare Facades into your modules you will like to create Aliases for you
     	"<MyAlias>" "App\\Modules\\<MyModule>\\Facades\\<MyFacade>"
     }
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/creolab/laravel-modules/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+# License
+
+Thi package is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
